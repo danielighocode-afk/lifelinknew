@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Service Request — LIFELINK Provider Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            emerald: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              200: '#a7f3d0',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+            },
+            slate: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#0f172a',
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #F8FAFC;
+      color: #0F172A;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .input-focus-effect:focus-within {
+      border-color: #059669;
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.12);
+    }
+    .modal-backdrop {
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(4px);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-50 antialiased selection:bg-emerald-100 selection:text-emerald-800" data-ll-page="preq" data-ll-role="provider">
+
+  <!-- TOP HEADER -->
+  <header class="bg-white border-b border-slate-200/80 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand & Back -->
+      <div class="flex items-center gap-4">
+        <a href="#" class="p-2 text-slate-500 hover:text-emerald-600 hover:bg-slate-50 rounded-xl transition" title="Back to Dashboard">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </a>
+        <div class="flex items-center gap-2.5 border-l border-slate-200 pl-4">
+          <img src="images/lifelink-logo.png" alt="LifeLink" class="h-10 w-auto object-contain">
+          <div>
+            <span class="text-[10px] font-extrabold text-emerald-700 tracking-wider uppercase">Provider Command Center</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Provider Status & Profile -->
+      <div class="flex items-center gap-4">
+        <div class="hidden sm:flex items-center gap-2 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200/80 text-xs font-bold text-emerald-800">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Online & Accepting Jobs</span>
+        </div>
+        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=120" alt="Chuks" class="w-9 h-9 rounded-full object-cover border border-slate-200 shadow-xs">
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN CANVAS -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
+
+    <!-- HEADER TITLE -->
+    <div class="text-center space-y-2 max-w-2xl mx-auto">
+      <div class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-800 text-xs font-extrabold px-3.5 py-1 rounded-full border border-emerald-200 mb-1">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        Incoming Dispatch #REQ-7749
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">New Service Request</h1>
+      <p class="text-sm sm:text-base font-semibold text-slate-500">Review customer request details and submit your quote instantly.</p>
+    </div>
+
+    <!-- TWO-COLUMN DASHBOARD GRID -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- LEFT COLUMN: PROMINENT REQUEST & QUOTE FORM (7 COLS) -->
+      <div class="lg:col-span-7 space-y-6">
+        
+        <!-- PROMINENT REQUEST CARD -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+          
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+            <div>
+              <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block">Client Issue Statement</span>
+              <h2 class="text-lg font-extrabold text-slate-900 mt-0.5">AC Repair Services</h2>
+            </div>
+            <span class="inline-flex items-center gap-1 bg-amber-50 text-amber-800 text-xs font-extrabold px-3 py-1 rounded-full border border-amber-200">
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+              Pending Quote
+            </span>
+          </div>
+
+          <!-- Customer Request Quote Box -->
+          <div class="p-4 sm:p-5 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-2">
+            <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">Customer Description</span>
+            <p class="text-sm font-bold text-slate-900 leading-relaxed italic">
+              "My AC is blowing air but the room isn't getting cold."
+            </p>
+          </div>
+
+          <!-- Key Booking Metadata Grid -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs font-semibold text-slate-600">
+            <div>
+              <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider">Service Location</span>
+              <span class="text-slate-900 font-extrabold text-sm mt-0.5 block">Benin City</span>
+            </div>
+            <div>
+              <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider">Requested Time</span>
+              <span class="text-slate-900 font-extrabold text-sm mt-0.5 block">Today, 4:00 PM</span>
+            </div>
+            <div>
+              <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider">Customer</span>
+              <div class="flex items-center gap-1.5 mt-0.5">
+                <span class="text-slate-900 font-extrabold text-sm">Verified Client</span>
+                <span class="text-amber-500 font-bold">★ 4.8</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Uploaded Photos / Video Thumbnails -->
+          <div class="space-y-2">
+            <span class="text-xs font-extrabold text-slate-700 uppercase tracking-wider block">Uploaded Photos & Evidence</span>
+            <div class="grid grid-cols-3 gap-3">
+              <div class="relative group rounded-2xl overflow-hidden border border-slate-200 aspect-video bg-slate-100 cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=300" class="w-full h-full object-cover group-hover:scale-105 transition">
+                <div class="absolute inset-0 bg-slate-900/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                  <span class="text-white text-xs font-extrabold bg-slate-900/60 px-2.5 py-1 rounded-lg backdrop-blur-xs">View</span>
+                </div>
+              </div>
+              <div class="relative group rounded-2xl overflow-hidden border border-slate-200 aspect-video bg-slate-100 cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=300" class="w-full h-full object-cover group-hover:scale-105 transition">
+                <div class="absolute inset-0 bg-slate-900/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                  <span class="text-white text-xs font-extrabold bg-slate-900/60 px-2.5 py-1 rounded-lg backdrop-blur-xs">View</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI-Generated Service Information -->
+          <div class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4 sm:p-5 space-y-2">
+            <div class="flex items-center gap-2">
+              <div class="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">AI</div>
+              <h4 class="text-xs font-extrabold text-emerald-800 uppercase tracking-wider">AI Service Intelligence</h4>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-semibold text-slate-700 pt-1">
+              <div>
+                <span class="text-slate-400 text-[10px] uppercase font-bold block">Recommended Category</span>
+                <span class="font-extrabold text-slate-900">AC Technician</span>
+              </div>
+              <div>
+                <span class="text-slate-400 text-[10px] uppercase font-bold block">Estimated Market Price</span>
+                <span class="font-extrabold text-emerald-700">₦15,000 – ₦35,000</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- QUOTE SUBMISSION FORM CARD -->
+        <form onsubmit="handleSendQuote(event)" class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+          <div class="border-b border-slate-100 pb-3">
+            <h3 class="text-lg font-extrabold text-slate-900">Submit Your Quote</h3>
+            <p class="text-xs font-semibold text-slate-500 mt-0.5">Send a competitive bid to win this customer booking instantly.</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Your Price -->
+            <div class="space-y-1.5">
+              <label class="block text-xs font-extrabold text-slate-700 uppercase tracking-wider">Your Price (₦)</label>
+              <div class="input-focus-effect bg-slate-50 border border-slate-300 rounded-2xl p-1 transition flex items-center">
+                <span class="pl-3.5 font-extrabold text-slate-400">₦</span>
+                <input type="number" id="quotePrice" value="22500" placeholder="22500" class="w-full bg-transparent text-sm font-bold text-slate-900 outline-none px-2 py-2.5">
+              </div>
+            </div>
+
+            <!-- Estimated Arrival -->
+            <div class="space-y-1.5">
+              <label class="block text-xs font-extrabold text-slate-700 uppercase tracking-wider">Estimated Arrival</label>
+              <div class="input-focus-effect bg-slate-50 border border-slate-300 rounded-2xl p-1 transition flex items-center">
+                <select id="estArrival" class="w-full bg-transparent text-sm font-bold text-slate-900 outline-none px-3 py-2.5 cursor-pointer">
+                  <option value="30" selected>30 minutes</option>
+                  <option value="45">45 minutes</option>
+                  <option value="60">1 hour</option>
+                  <option value="120">2 hours</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Message to Customer -->
+          <div class="space-y-1.5">
+            <label class="block text-xs font-extrabold text-slate-700 uppercase tracking-wider">Message to Customer</label>
+            <div class="bg-slate-50 border border-slate-300 rounded-2xl p-1 focus-within:border-emerald-600 transition">
+              <textarea id="quoteMessage" rows="3" class="w-full bg-transparent text-sm font-semibold text-slate-800 outline-none p-3.5 resize-none leading-relaxed" placeholder="Describe your approach, availability or any additional information.">Hello! I can inspect your AC refrigerant levels and compressor today at 4:00 PM. Guaranteed cooling performance.</textarea>
+            </div>
+          </div>
+
+          <!-- Materials Note Checkbox -->
+          <div class="flex items-center gap-2.5 pt-1">
+            <input type="checkbox" id="materialsNote" checked class="w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500 accent-emerald-600">
+            <label for="materialsNote" class="text-xs font-semibold text-slate-600">Materials may affect final price (gas refill or spare parts if required)</label>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
+            <button type="submit" class="w-full sm:w-1/2 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-extrabold py-3.5 rounded-2xl shadow-md shadow-emerald-600/20 transition text-xs flex items-center justify-center gap-2">
+              <span>Send Quote</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </button>
+            <button type="button" onclick="handleDecline()" class="w-full sm:w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold py-3.5 rounded-2xl transition text-xs">
+              Decline Request
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+
+      <!-- RIGHT COLUMN: PERFORMANCE SIDE PANEL (5 COLS) -->
+      <div class="lg:col-span-5 space-y-6">
+        
+        <!-- PERFORMANCE CARD -->
+        <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-6">
+          
+          <div class="border-b border-slate-100 pb-4 flex items-center justify-between">
+            <div>
+              <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest block">Provider Metrics</span>
+              <h3 class="text-base font-extrabold text-slate-900">Your performance</h3>
+            </div>
+            <span class="text-xs font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">Top Rated</span>
+          </div>
+
+          <!-- Metrics List -->
+          <div class="space-y-4 text-xs">
+            
+            <!-- Trust Score -->
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
+              <div>
+                <span class="text-slate-500 font-semibold block">Trust Score</span>
+                <span class="text-slate-400 text-[11px]">Based on verification & ratings</span>
+              </div>
+              <div class="text-lg font-extrabold text-emerald-600 bg-white px-3.5 py-1.5 rounded-xl border border-slate-200 shadow-xs">
+                94<span class="text-xs text-slate-400">/100</span>
+              </div>
+            </div>
+
+            <!-- Response Rate -->
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
+              <div>
+                <span class="text-slate-500 font-semibold block">Response rate</span>
+                <span class="text-slate-400 text-[11px]">Last 30 days average</span>
+              </div>
+              <div class="text-base font-extrabold text-slate-900 bg-white px-3.5 py-1.5 rounded-xl border border-slate-200 shadow-xs">
+                98%
+              </div>
+            </div>
+
+            <!-- Average Response Time -->
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
+              <div>
+                <span class="text-slate-500 font-semibold block">Average response time</span>
+                <span class="text-slate-400 text-[11px]">Speed wins customers</span>
+              </div>
+              <div class="text-base font-extrabold text-slate-900 bg-white px-3.5 py-1.5 rounded-xl border border-slate-200 shadow-xs">
+                7 min
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Tip Box -->
+          <div class="p-4 bg-emerald-50/70 border border-emerald-200 rounded-2xl space-y-1">
+            <span class="text-[11px] font-extrabold text-emerald-800 uppercase tracking-wider block">💡 Pro Tip</span>
+            <p class="text-xs font-semibold text-slate-600 leading-relaxed">
+              Responding within 10 minutes increases your likelihood of winning this booking by <strong class="text-emerald-700">3.2x</strong>.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- SUCCESS MODAL -->
+  <div id="quoteModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <div onclick="closeQuoteModal()" class="absolute inset-0 modal-backdrop"></div>
+    <div class="relative bg-white rounded-3xl max-w-md w-full mx-4 p-6 sm:p-8 border border-slate-200 shadow-2xl space-y-6 z-10 text-center">
+      <div class="w-14 h-14 bg-emerald-100 text-emerald-700 rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold shadow-sm">
+        ✓
+      </div>
+      <div class="space-y-2">
+        <h3 class="text-xl font-extrabold text-slate-900">Quote Sent Successfully!</h3>
+        <p class="text-xs font-semibold text-slate-500 leading-relaxed">
+          Your quote of <strong id="modalQuoteAmount" class="text-emerald-600">₦22,500</strong> has been delivered to the customer. You will be notified instantly when they accept.
+        </p>
+      </div>
+      <button onclick="closeQuoteModal()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-extrabold py-3.5 rounded-2xl transition text-xs">
+        Return to Dashboard
+      </button>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE SCRIPT -->
+  <script>
+    function handleSendQuote(e) {
+      e.preventDefault();
+      const price = document.getElementById('quotePrice').value;
+      document.getElementById('modalQuoteAmount').innerText = `₦${Number(price).toLocaleString()}`;
+      document.getElementById('quoteModal').classList.remove('hidden');
+    }
+
+    function closeQuoteModal() {
+      document.getElementById('quoteModal').classList.add('hidden');
+      alert('Redirecting back to provider queue...');
+    }
+
+    function handleDecline() {
+      if (confirm('Are you sure you want to decline this request? It will be removed from your active queue.')) {
+        alert('Request declined.');
+      }
+    }
+  </script>
+<script src="lifelink.js"></script>
+</body>
+</html>

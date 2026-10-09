@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIFELINK - Find Plumbers in Benin City</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            500: '#10b981', // LIFELINK Emerald Brand
+                            600: '#059669',
+                            700: '#047857',
+                        },
+                        charcoal: {
+                            900: '#111827',
+                            800: '#1f2937',
+                            700: '#374151',
+                            600: '#4b5563',
+                            500: '#6b7280',
+                            400: '#9ca3af',
+                            100: '#f3f4f6',
+                            50: '#f9fafb'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', '-apple-system', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 2px 10px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02)',
+                        'card-hover': '0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.03)',
+                        'map-pop': '0 12px 30px -4px rgba(16, 185, 129, 0.25)',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #ffffff;
+            color: #111827;
+            overflow-x: hidden;
+        }
+        /* Custom scrollbar for left side provider list */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #f9fafb;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #e5e7eb;
+            border-radius: 9999px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #d1d5db;
+        }
+        .map-grid-bg {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#cbd5e1 0.85px, transparent 0.85px);
+            background-size: 24px 24px;
+        }
+        /* Marker Pin Pulse Animation */
+        @keyframes pin-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+        .active-pin {
+            animation: pin-pulse 1.8s infinite ease-in-out;
+            z-index: 40 !important;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col bg-white overflow-hidden" data-ll-page="discovery" data-ll-role="public">
+
+    <!-- HEADER NAVBAR -->
+    <header class="h-16 border-b border-gray-200 bg-white px-6 flex items-center justify-between z-30 shrink-0">
+        <!-- Logo & Symbol -->
+        <div class="flex items-center gap-8">
+            <a href="#" class="flex items-center gap-2.5 group">
+                <img src="images/lifelink-logo.png" alt="LifeLink" class="h-10 w-auto object-contain">
+            </a>
+
+            <!-- Search Header Quick Bar -->
+            <div class="hidden md:flex items-center bg-charcoal-50 rounded-full border border-gray-200 p-1 pl-4 max-w-xl text-xs font-semibold">
+                <div class="flex items-center gap-2 pr-3 border-r border-gray-200 text-charcoal-800">
+                    <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <span class="font-bold text-charcoal-900">Plumber</span>
+                </div>
+                <div class="flex items-center gap-2 px-3 text-charcoal-600">
+                    <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    <span>Benin City, Edo State</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Links & User Profile -->
+        <div class="flex items-center gap-6 text-xs font-bold text-charcoal-700">
+            <nav class="hidden lg:flex items-center gap-6">
+                <a href="#" class="text-emerald-600 hover:text-emerald-700">Explore Services</a>
+                <a href="#" class="hover:text-charcoal-900 transition-colors">How It Works</a>
+                <a href="#" class="hover:text-charcoal-900 transition-colors">Become a Provider</a>
+            </nav>
+            <div class="h-4 w-px bg-gray-200 hidden lg:block"></div>
+            <div class="flex items-center gap-3">
+                <button class="relative p-2 text-charcoal-600 hover:text-charcoal-900 rounded-full hover:bg-gray-100 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                    <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-emerald-500 rounded-full ring-2 ring-white"></span>
+                </button>
+                <div class="flex items-center gap-2 pl-2 border-l border-gray-200">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120" alt="Osas" class="w-8 h-8 rounded-full object-cover ring-2 ring-emerald-500/20">
+                    <span class="hidden sm:inline-block font-extrabold text-charcoal-900">Daniel E.</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN SPLIT SCREEN INTERFACE -->
+    <main class="flex-1 flex overflow-hidden">
+        
+        <!-- ================= LEFT SIDE: SEARCH, FILTERS & PROVIDER CARDS ================= -->
+        <section class="w-full lg:w-[48%] xl:w-[45%] flex flex-col bg-white border-r border-gray-200 z-20 shrink-0">
+            
+            <!-- SEARCH & FILTER HEADER PANEL -->
+            <div class="p-5 border-b border-gray-200 bg-white space-y-4 shrink-0 shadow-sm">
+                
+                <!-- Search inputs -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <!-- Service Input -->
+                    <div class="relative flex items-center">
+                        <div class="absolute left-3.5 text-emerald-500 pointer-events-none">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        </div>
+                        <input type="text" id="searchInput" value="Plumber" onkeyup="handleFilterSearch()" placeholder="What do you need?" class="w-full bg-charcoal-50 border border-gray-200 focus:border-emerald-500 focus:bg-white text-xs font-bold text-charcoal-900 rounded-xl pl-10 pr-3 py-2.5 transition-all outline-none">
+                    </div>
+
+                    <!-- Location Selector -->
+                    <div class="relative flex items-center">
+                        <div class="absolute left-3.5 text-emerald-500 pointer-events-none">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        </div>
+                        <select id="locationSelect" onchange="handleLocationChange()" class="w-full bg-charcoal-50 border border-gray-200 focus:border-emerald-500 focus:bg-white text-xs font-bold text-charcoal-900 rounded-xl pl-10 pr-8 py-2.5 transition-all outline-none appearance-none cursor-pointer">
+                            <option value="Benin City">Benin City, Edo State</option>
+                            <option value="GRA">GRA (Government Res. Area)</option>
+                            <option value="Airport Road">Airport Road & Ugbor</option>
+                            <option value="Sapele Road">Sapele Road Axis</option>
+                            <option value="Uselu">Uselu & UNIBEN Axis</option>
+                        </select>
+                        <div class="absolute right-3 text-gray-400 pointer-events-none">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FILTER CHIPS & TOGGLES BAR -->
+                <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+                    
+                    <!-- Filter: Verified Only Toggle -->
+                    <button id="toggleVerified" onclick="toggleVerifiedFilter()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-bold text-charcoal-700 bg-white hover:bg-gray-50 transition-all shrink-0">
+                        <span class="w-2 h-2 rounded-full bg-gray-300" id="verifiedDot"></span>
+                        <span>Verified Only</span>
+                    </button>
+
+                    <!-- Filter: Distance Dropdown -->
+                    <select id="filterDistance" onchange="applyFilters()" class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-bold text-charcoal-700 bg-white hover:bg-gray-50 transition-all outline-none cursor-pointer shrink-0">
+                        <option value="all">Distance: Any</option>
+                        <option value="2">Within 2 km</option>
+                        <option value="5">Within 5 km</option>
+                        <option value="10">Within 10 km</option>
+                    </select>
+
+                    <!-- Filter: Rating -->
+                    <select id="filterRating" onchange="applyFilters()" class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-bold text-charcoal-700 bg-white hover:bg-gray-50 transition-all outline-none cursor-pointer shrink-0">
+                        <option value="all">Rating: All Stars</option>
+                        <option value="4.8">4.8★ & Above</option>
+                        <option value="4.5">4.5★ & Above</option>
+                    </select>
+
+                    <!-- Filter: Availability -->
+                    <select id="filterAvailability" onchange="applyFilters()" class="px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-bold text-charcoal-700 bg-white hover:bg-gray-50 transition-all outline-none cursor-pointer shrink-0">
+                        <option value="all">Availability: Any Time</option>
+                        <option value="today">Available Today</option>
+                        <option value="immediate">Immediate Dispatch</option>
+                    </select>
+
+                    <!-- Filter: Trust Score -->
+                    <button onclick="toggleTrustScoreFilter()" id="btnTrustScore" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-bold text-charcoal-700 bg-white hover:bg-gray-50 transition-all shrink-0">
+                        <span class="text-emerald-500 font-extrabold">95%+</span>
+                        <span>Trust Score</span>
+                    </button>
+
+                </div>
+
+                <!-- Results Summary Bar -->
+                <div class="flex items-center justify-between text-xs font-semibold text-charcoal-500 pt-1">
+                    <div>
+                        Showing <span id="resultsCount" class="font-extrabold text-charcoal-900">4 verified plumbers</span> near <span id="activeAreaLabel" class="text-emerald-700 font-extrabold">Benin City</span>
+                    </div>
+                    <div class="flex items-center gap-1 text-charcoal-600">
+                        <span>Sort:</span>
+                        <select id="sortOrder" onchange="applyFilters()" class="font-bold text-charcoal-900 bg-transparent outline-none cursor-pointer">
+                            <option value="recommended">Best Match</option>
+                            <option value="trust">Highest Trust Score</option>
+                            <option value="distance">Nearest First</option>
+                            <option value="price">Price: Low to High</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- PROVIDER LIST CARDS SCROLLABLE CONTAINER -->
+            <div id="providerCardsList" class="flex-1 overflow-y-auto custom-scroll p-5 space-y-4 bg-charcoal-50">
+                <!-- Javascript Dynamic Provider Cards Rendered Here -->
+            </div>
+
+        </section>
+
+        <!-- ================= RIGHT SIDE: INTERACTIVE MAP CANVAS ================= -->
+        <section class="hidden lg:flex flex-1 relative bg-slate-100 flex-col overflow-hidden">
+            
+            <!-- FLOATING MAP CONTROLS HEADER -->
+            <div class="absolute top-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 bg-white px-4 py-2 rounded-full border border-gray-200 shadow-lg text-xs font-bold text-charcoal-800">
+                <button onclick="recenterMap()" class="flex items-center gap-1.5 text-emerald-600 hover:text-emerald-700 transition-colors">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0 0 13 3.06V1h-2v2.06A8.994 8.994 0 0 0 3.06 11H1v2h2.06A8.994 8.994 0 0 0 11 20.94V23h2v-2.06A8.994 8.994 0 0 0 20.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
+                    <span>Search this area</span>
+                </button>
+                <div class="h-3 w-px bg-gray-200"></div>
+                <span class="text-charcoal-500 font-medium">Map centered: <strong class="text-charcoal-900">Benin City Hub</strong></span>
+            </div>
+
+            <!-- VECTOR MAP CANVAS BACKGROUND (BENIN CITY LIGHT MODE CUSTOM MAP) -->
+            <div id="mapViewport" class="w-full h-full relative map-grid-bg select-none overflow-hidden cursor-grab active:cursor-grabbing">
+                
+                <!-- SVG LIGHT MAP LAYOUT FOR BENIN CITY (ROADS, NEIGHBORHOODS, LANDMARKS) -->
+                <svg class="w-full h-full absolute inset-0 pointer-events-none" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice">
+                    
+                    <!-- Parks & Greenery Areas -->
+                    <path d="M 120 180 Q 200 120 310 190 Q 250 290 150 250 Z" fill="#e6f4ea" opacity="0.8"/>
+                    <path d="M 680 480 Q 820 400 900 520 Q 800 650 650 600 Z" fill="#e6f4ea" opacity="0.8"/>
+                    <path d="M 450 620 Q 550 580 600 680 Q 500 760 420 710 Z" fill="#e6f4ea" opacity="0.8"/>
+
+                    <!-- Water Bodies / Ogba River Tributary -->
+                    <path d="M 0 550 Q 200 520 350 610 T 600 780 T 800 850" fill="none" stroke="#bae6fd" stroke-width="18" stroke-linecap="round"/>
+                    <path d="M 0 550 Q 200 520 350 610 T 600 780 T 800 850" fill="none" stroke="#e0f2fe" stroke-width="12" stroke-linecap="round"/>
+
+                    <!-- Secondary Arterial Roads (Soft Gray) -->
+                    <g stroke="#cbd5e1" stroke-width="6" stroke-linecap="round" fill="none">
+                        <!-- Ring Road Arterials -->
+                        <line x1="500" y1="400" x2="100" y2="100"/>
+                        <line x1="500" y1="400" x2="900" y2="150"/>
+                        <line x1="500" y1="400" x2="850" y2="700"/>
+                        <line x1="500" y1="400" x2="150" y2="750"/>
+                        <!-- Grid Crosses -->
+                        <path d="M 200 200 L 800 250 M 150 450 L 850 420 M 250 650 L 750 620" stroke-width="3" stroke-dasharray="8 6"/>
+                    </g>
+
+                    <!-- Major Highways in Benin City (Bold Soft White with Gray Borders) -->
+                    <!-- Sapele Road -->
+                    <line x1="500" y1="400" x2="780" y2="780" stroke="#94a3b8" stroke-width="12"/>
+                    <line x1="500" y1="400" x2="780" y2="780" stroke="#ffffff" stroke-width="8"/>
+                    
+                    <!-- Airport Road -->
+                    <line x1="500" y1="400" x2="180" y2="650" stroke="#94a3b8" stroke-width="12"/>
+                    <line x1="500" y1="400" x2="180" y2="650" stroke="#ffffff" stroke-width="8"/>
+
+                    <!-- Akpakpava / Ikpoba Hill Road -->
+                    <line x1="500" y1="400" x2="880" y2="220" stroke="#94a3b8" stroke-width="12"/>
+                    <line x1="500" y1="400" x2="880" y2="220" stroke="#ffffff" stroke-width="8"/>
+
+                    <!-- Uselu / Lagos Road -->
+                    <line x1="500" y1="400" x2="200" y2="150" stroke="#94a3b8" stroke-width="12"/>
+                    <line x1="500" y1="400" x2="200" y2="150" stroke="#ffffff" stroke-width="8"/>
+
+                    <!-- Ring Road Central Roundabout (King's Square) -->
+                    <circle cx="500" cy="400" r="32" fill="#ffffff" stroke="#94a3b8" stroke-width="5"/>
+                    <circle cx="500" cy="400" r="22" fill="#ecfdf5" stroke="#10b981" stroke-width="3"/>
+
+                    <!-- Neighborhood Text Labels on Map -->
+                    <text x="500" y="404" text-anchor="middle" font-size="9" font-weight="800" fill="#047857">RING ROAD</text>
+                    <text x="320" y="320" font-size="12" font-weight="800" fill="#475569" letter-spacing="1">GRA BENIN</text>
+                    <text x="260" y="580" font-size="11" font-weight="800" fill="#64748b">AIRPORT RD AXIS</text>
+                    <text x="660" y="610" font-size="11" font-weight="800" fill="#64748b">SAPELE ROAD</text>
+                    <text x="250" y="190" font-size="11" font-weight="800" fill="#64748b">USELU / UNIBEN</text>
+                    <text x="730" y="240" font-size="11" font-weight="800" fill="#64748b">IKPOBA HILL</text>
+                    <text x="140" y="420" font-size="11" font-weight="800" fill="#64748b">EKENWAN ROAD</text>
+                </svg>
+
+                <!-- DYNAMIC MAP PINS LAYER -->
+                <div id="mapPinsContainer" class="absolute inset-0 pointer-events-auto">
+                    <!-- Javascript Dynamic Pins Injection -->
+                </div>
+
+            </div>
+
+            <!-- MAP CONTROLS BUTTONS (BOTTOM RIGHT) -->
+            <div class="absolute bottom-6 right-6 z-20 flex flex-col gap-2">
+                <div class="bg-white rounded-xl border border-gray-200 shadow-md overflow-hidden flex flex-col">
+                    <button onclick="zoomMap(1)" class="p-2.5 text-charcoal-700 hover:bg-gray-100 hover:text-emerald-600 transition-colors border-b border-gray-200" title="Zoom In">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                    </button>
+                    <button onclick="zoomMap(-1)" class="p-2.5 text-charcoal-700 hover:bg-gray-100 hover:text-emerald-600 transition-colors" title="Zoom Out">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
+                    </button>
+                </div>
+
+                <button onclick="recenterMap()" class="bg-white p-3 rounded-xl border border-gray-200 shadow-md text-charcoal-700 hover:text-emerald-600 hover:bg-gray-50 transition-all" title="Current Location">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0 0 13 3.06V1h-2v2.06A8.994 8.994 0 0 0 3.06 11H1v2h2.06A8.994 8.994 0 0 0 11 20.94V23h2v-2.06A8.994 8.994 0 0 0 20.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
+                </button>
+            </div>
+
+            <!-- MAP LEGEND FOOTER -->
+            <div class="absolute bottom-6 left-6 z-20 bg-white/90 backdrop-blur-md px-3.5 py-2 rounded-xl border border-gray-200 shadow-sm text-[11px] font-bold text-charcoal-700 flex items-center gap-4">
+                <div class="flex items-center gap-1.5">
+                    <span class="w-3 h-3 rounded-full bg-emerald-500 border border-white shadow-sm"></span>
+                    <span>Available Today</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="w-3 h-3 rounded-full bg-amber-500 border border-white shadow-sm"></span>
+                    <span>Next Slot Later</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="w-3 h-3 rounded-full bg-gray-400 border border-white shadow-sm"></span>
+                    <span>Fully Booked</span>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- DIRECT BOOKING MODAL -->
+    <div id="bookingModal" class="fixed inset-0 z-50 hidden bg-charcoal-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl border border-gray-200 w-full max-w-lg overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200 space-y-0">
+            
+            <!-- Modal Header -->
+            <div class="p-5 border-b border-gray-200 flex items-center justify-between bg-charcoal-50">
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-lg bg-emerald-500 text-white flex items-center justify-center">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+                    </div>
+                    <h3 class="text-sm font-extrabold text-charcoal-900">Book Professional Service</h3>
+                </div>
+                <button onclick="closeBookingModal()" class="p-1 rounded-lg text-gray-400 hover:text-charcoal-900 hover:bg-gray-200">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 space-y-4">
+                
+                <!-- Selected Provider Quick Summary -->
+                <div class="flex items-center gap-4 bg-emerald-50/50 p-3.5 rounded-xl border border-emerald-200">
+                    <img id="modalProImg" src="" alt="" class="w-14 h-14 rounded-xl object-cover border border-emerald-300 shadow-sm">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-1.5">
+                            <h4 id="modalProName" class="text-xs font-extrabold text-charcoal-900 truncate">Provider Name</h4>
+                            <span class="text-emerald-600">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                            </span>
+                        </div>
+                        <p id="modalProTitle" class="text-[11px] font-bold text-emerald-700">Plumbing & Mechanical Specialist</p>
+                        <div class="flex items-center gap-3 text-[10px] text-charcoal-600 font-semibold mt-1">
+                            <span id="modalProRating">4.9 ★</span>
+                            <span>•</span>
+                            <span id="modalProJobs">142 jobs</span>
+                            <span>•</span>
+                            <span id="modalProDistance">1.8 km</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service Schedule -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-extrabold text-charcoal-800 block">Select Preferred Arrival Time</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="border border-emerald-500 bg-emerald-50/60 p-3 rounded-xl flex items-center justify-between cursor-pointer">
+                            <div>
+                                <span class="block text-xs font-extrabold text-emerald-900">⚡ Immediate Callout</span>
+                                <span class="text-[10px] text-emerald-700 font-medium">Within 30-45 minutes</span>
+                            </div>
+                            <input type="radio" name="schedule" checked class="accent-emerald-500">
+                        </label>
+                        <label class="border border-gray-200 hover:border-emerald-500 p-3 rounded-xl flex items-center justify-between cursor-pointer">
+                            <div>
+                                <span class="block text-xs font-extrabold text-charcoal-900">📅 Scheduled Visit</span>
+                                <span class="text-[10px] text-charcoal-500 font-medium">Pick date & time</span>
+                            </div>
+                            <input type="radio" name="schedule" class="accent-emerald-500">
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Problem Description -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-extrabold text-charcoal-800 block">Describe Plumbing Issue (Optional)</label>
+                    <textarea placeholder="e.g. Leaking pipe under bathroom sink, water pump pressure issues, or tap installation..." class="w-full bg-charcoal-50 border border-gray-200 focus:border-emerald-500 focus:bg-white text-xs font-medium text-charcoal-900 rounded-xl p-3 h-20 outline-none resize-none transition-all"></textarea>
+                </div>
+
+                <!-- Escrow & Rate Details -->
+                <div class="bg-gray-50 p-3.5 rounded-xl border border-gray-200 space-y-2 text-xs">
+                    <div class="flex justify-between font-semibold text-charcoal-600">
+                        <span>Base Inspection / Callout Fee:</span>
+                        <span id="modalProPrice" class="font-bold text-charcoal-900">₦8,500</span>
+                    </div>
+                    <div class="flex justify-between font-semibold text-charcoal-600">
+                        <span>LIFELINK Escrow Protection Fee:</span>
+                        <span class="font-bold text-emerald-600">Free</span>
+                    </div>
+                    <div class="pt-2 border-t border-gray-200 flex justify-between font-extrabold text-charcoal-900 text-sm">
+                        <span>Total Due (Held in Escrow):</span>
+                        <span id="modalTotalPay" class="text-emerald-600">₦8,500</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-5 border-t border-gray-200 bg-gray-50 flex items-center justify-between">
+                <span class="text-[11px] text-charcoal-500 font-medium max-w-[200px] leading-tight">
+                    🔒 Funds released to provider only after work completion.
+                </span>
+                <button onclick="confirmBooking()" class="bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white font-extrabold text-xs px-6 py-3 rounded-xl shadow-md shadow-emerald-500/20 transition-all">
+                    Confirm & Reserve Now
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APP LOGIC & DATA -->
+    <script>
+        // Highly Detailed Dataset of Local Plumbers in Benin City
+        const plumbers = [
+            {
+                id: "pro-1",
+                name: "Osas Plumbing & Mechanicals",
+                owner: "Engr. Osasere Igbinedion",
+                title: "Master Pipefitter & Solar Water Tech",
+                rating: 4.9,
+                reviews: 142,
+                completedJobs: 189,
+                distance: "1.8 km",
+                distanceNum: 1.8,
+                price: "₦8,500/hr",
+                priceNum: 8500,
+                availability: "Available Today",
+                availCode: "today",
+                statusColor: "emerald",
+                trustScore: 98,
+                verified: true,
+                badge: "Top Rated Pro",
+                area: "GRA Benin",
+                coords: { x: 380, y: 340 }, // Pixel relative coordinates on vector map
+                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300",
+                bio: "Specializes in modern PPR pipe threading, borehole pump installation, bathroom leaks, and residential plumbing maintenance across GRA and Airport Road."
+            },
+            {
+                id: "pro-2",
+                name: "Victor Edosomwan Plumbing",
+                owner: "Victor Edosomwan",
+                title: "Certified Drainage & Leak Specialist",
+                rating: 4.8,
+                reviews: 98,
+                completedJobs: 124,
+                distance: "2.4 km",
+                distanceNum: 2.4,
+                price: "₦7,000/hr",
+                priceNum: 7000,
+                availability: "Next Slot 2:30 PM",
+                availCode: "today",
+                statusColor: "amber",
+                trustScore: 96,
+                verified: true,
+                badge: "Fast Responder",
+                area: "Airport Road",
+                coords: { x: 310, y: 520 },
+                image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300",
+                bio: "10+ years experience solving clogged sewer lines, water heater installations, and emergency pipe bursts in Benin City."
+            },
+            {
+                id: "pro-3",
+                name: "Benson Omoregie Sanitary Services",
+                owner: "Benson Omoregie",
+                title: "Commercial & Domestic Plumber",
+                rating: 4.9,
+                reviews: 215,
+                completedJobs: 310,
+                distance: "3.1 km",
+                distanceNum: 3.1,
+                price: "₦10,000/hr",
+                priceNum: 10000,
+                availability: "Available Today",
+                availCode: "immediate",
+                statusColor: "emerald",
+                trustScore: 99,
+                verified: true,
+                badge: "Master Craftsman",
+                area: "Sapele Road",
+                coords: { x: 620, y: 550 },
+                image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=300",
+                bio: "Full-service plumbing contractor for estate developments, luxury homes, industrial pumps and water treatment units."
+            },
+            {
+                id: "pro-4",
+                name: "Blessing Repairs & Maintenance",
+                owner: "Blessing Akenzua",
+                title: "Residential Leak & Appliance Tech",
+                rating: 4.7,
+                reviews: 64,
+                completedJobs: 82,
+                distance: "4.5 km",
+                distanceNum: 4.5,
+                price: "₦6,500/hr",
+                priceNum: 6500,
+                availability: "Book for Tomorrow",
+                availCode: "later",
+                statusColor: "gray",
+                trustScore: 94,
+                verified: true,
+                badge: "Verified Local",
+                area: "Uselu Axis",
+                coords: { x: 280, y: 220 },
+                image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300",
+                bio: "Prompt, honest plumbing repair service for kitchen sinks, flush tanks, water pressure meters, and tap replacements."
+            }
+        ];
+
+        let currentFilterState = {
+            query: "Plumber",
+            location: "Benin City",
+            verifiedOnly: false,
+            trustScoreOnly: false,
+            distance: "all",
+            rating: "all",
+            availability: "all",
+            sort: "recommended"
+        };
+
+        let selectedProId = "pro-1";
+
+        // Render Cards in Left Side List
+        function renderProviderCards(data) {
+            const container = document.getElementById('providerCardsList');
+            document.getElementById('resultsCount').innerText = `${data.length} verified plumbers`;
+            container.innerHTML = '';
+
+            if (data.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-2xl border border-gray-200 p-8 text-center space-y-3">
+                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        </div>
+                        <h4 class="text-sm font-extrabold text-charcoal-900">No plumbers match your exact filters</h4>
+                        <p class="text-xs text-charcoal-500 max-w-xs mx-auto">Try loosening your rating or distance filters to see more professionals in Benin City.</p>
+                        <button onclick="resetFilters()" class="text-xs font-extrabold text-emerald-600 hover:text-emerald-700 underline">Reset all filters</button>
+                    </div>
+                `;
+                return;
+            }
+
+            data.forEach(pro => {
+                const isSelected = pro.id === selectedProId;
+                const card = document.createElement('div');
+                card.id = `card-${pro.id}`;
+                card.onclick = () => selectProvider(pro.id);
+                
+                card.className = `bg-white rounded-2xl border transition-all cursor-pointer p-5 space-y-4 shadow-soft hover:shadow-card-hover ${
+                    isSelected ? 'border-emerald-500 ring-2 ring-emerald-500/20 bg-emerald-50/10' : 'border-gray-200 hover:border-gray-300'
+                }`;
+
+                card.innerHTML = `
+                    <!-- Top Row: Photo, Name & Badges -->
+                    <div class="flex items-start gap-4">
+                        <div class="relative shrink-0">
+                            <img src="${pro.image}" alt="${pro.name}" class="w-16 h-16 rounded-xl object-cover border border-gray-200 shadow-sm">
+                            ${pro.verified ? `
+                                <span class="absolute -bottom-1 -right-1 bg-emerald-500 text-white rounded-full p-1 shadow-sm" title="LIFELINK Verified Professional">
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>
+                                </span>
+                            ` : ''}
+                        </div>
+
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between gap-2">
+                                <h3 class="text-sm font-extrabold text-charcoal-900 truncate hover:text-emerald-600 transition-colors">${pro.name}</h3>
+                                <span class="shrink-0 text-[10px] font-extrabold text-emerald-700 bg-emerald-100/80 border border-emerald-200 px-2 py-0.5 rounded-full">
+                                    Trust Score ${pro.trustScore}/100
+                                </span>
+                            </div>
+
+                            <p class="text-xs font-bold text-emerald-600 mt-0.5">${pro.title}</p>
+                            <p class="text-[11px] text-charcoal-500 font-medium truncate mt-0.5">${pro.owner} • <span class="text-charcoal-800 font-bold">${pro.area}</span></p>
+
+                            <!-- Ratings & Job Counter -->
+                            <div class="flex items-center gap-3 text-xs font-bold text-charcoal-700 mt-2">
+                                <span class="flex items-center gap-1 text-amber-500 font-extrabold bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
+                                    ★ ${pro.rating} <span class="text-charcoal-500 font-medium text-[11px]">(${pro.reviews})</span>
+                                </span>
+                                <span>•</span>
+                                <span class="text-charcoal-600">${pro.completedJobs} jobs done</span>
+                                <span>•</span>
+                                <span class="text-charcoal-500">${pro.distance} away</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Short Bio snippet -->
+                    <p class="text-xs text-charcoal-600 font-medium line-clamp-2 leading-relaxed bg-charcoal-50 p-2.5 rounded-xl border border-gray-100">
+                        "${pro.bio}"
+                    </p>
+
+                    <!-- Bottom Bar: Price, Availability & Action CTA -->
+                    <div class="flex items-center justify-between pt-2 border-t border-gray-100 gap-2">
+                        <div>
+                            <span class="text-[10px] uppercase tracking-wider font-extrabold text-charcoal-400 block">Estimated Rate</span>
+                            <span class="text-sm font-extrabold text-charcoal-900">${pro.price}</span>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <!-- Availability Pill -->
+                            <span class="hidden sm:inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 rounded-lg border ${
+                                pro.statusColor === 'emerald' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                                pro.statusColor === 'amber' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                                'bg-gray-100 text-charcoal-600 border-gray-200'
+                            }">
+                                <span class="w-1.5 h-1.5 rounded-full ${
+                                    pro.statusColor === 'emerald' ? 'bg-emerald-500' :
+                                    pro.statusColor === 'amber' ? 'bg-amber-500' : 'bg-gray-400'
+                                }"></span>
+                                ${pro.availability}
+                            </span>
+
+                            <!-- CTA Buttons -->
+                            <button onclick="openBookingModal('${pro.id}', event)" class="bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white font-extrabold text-xs px-4 py-2.5 rounded-xl shadow-sm transition-all flex items-center gap-1">
+                                <span>Book Now</span>
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        // Render Dynamic Pins on Vector Map Right Panel
+        function renderMapPins(data) {
+            const container = document.getElementById('mapPinsContainer');
+            container.innerHTML = '';
+
+            data.forEach(pro => {
+                const isSelected = pro.id === selectedProId;
+                const pin = document.createElement('div');
+                pin.id = `pin-${pro.id}`;
+                pin.className = `absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-300 cursor-pointer group ${isSelected ? 'active-pin' : ''}`;
+                pin.style.left = `${pro.coords.x}px`;
+                pin.style.top = `${pro.coords.y}px`;
+                pin.onclick = () => selectProvider(pro.id);
+
+                pin.innerHTML = `
+                    <!-- Marker Pin Graphic -->
+                    <div class="relative flex flex-col items-center">
+                        
+                        <!-- Hover Popup Badge -->
+                        <div class="mb-1 opacity-90 group-hover:opacity-100 transition-opacity bg-white px-2.5 py-1 rounded-xl border border-gray-200 shadow-md flex items-center gap-1.5 whitespace-nowrap">
+                            <span class="text-xs font-extrabold text-charcoal-900">${pro.price}</span>
+                            <span class="text-[10px] font-bold text-amber-500">★ ${pro.rating}</span>
+                        </div>
+
+                        <!-- Pin Core Icon -->
+                        <div class="w-10 h-10 rounded-full ${isSelected ? 'bg-emerald-600 ring-4 ring-emerald-200' : 'bg-emerald-500'} border-2 border-white shadow-lg flex items-center justify-center text-white transition-transform group-hover:scale-110">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(pin);
+            });
+        }
+
+        // Selection Synchronization (Card <-> Map Pin)
+        function selectProvider(id) {
+            selectedProId = id;
+            const pro = plumbers.find(p => p.id === id);
+            if (!pro) return;
+
+            // Re-render list highlights
+            const filtered = getFilteredData();
+            renderProviderCards(filtered);
+            renderMapPins(filtered);
+
+            // Scroll card into view smoothly
+            const cardEl = document.getElementById(`card-${id}`);
+            if (cardEl) {
+                cardEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        // Filtering Engine Logic
+        function getFilteredData() {
+            return plumbers.filter(pro => {
+                // Search query filter
+                if (currentFilterState.query) {
+                    const q = currentFilterState.query.toLowerCase();
+                    const match = pro.name.toLowerCase().includes(q) || 
+                                  pro.title.toLowerCase().includes(q) || 
+                                  pro.bio.toLowerCase().includes(q) ||
+                                  pro.owner.toLowerCase().includes(q);
+                    if (!match) return false;
+                }
+
+                // Verified filter
+                if (currentFilterState.verifiedOnly && !pro.verified) return false;
+
+                // Trust Score Filter
+                if (currentFilterState.trustScoreOnly && pro.trustScore < 95) return false;
+
+                // Distance Filter
+                if (currentFilterState.distance !== 'all') {
+                    const maxDist = parseFloat(currentFilterState.distance);
+                    if (pro.distanceNum > maxDist) return false;
+                }
+
+                // Rating Filter
+                if (currentFilterState.rating !== 'all') {
+                    const minRating = parseFloat(currentFilterState.rating);
+                    if (pro.rating < minRating) return false;
+                }
+
+                // Availability Filter
+                if (currentFilterState.availability !== 'all') {
+                    if (currentFilterState.availability === 'today' && pro.availCode !== 'today' && pro.availCode !== 'immediate') return false;
+                    if (currentFilterState.availability === 'immediate' && pro.availCode !== 'immediate') return false;
+                }
+
+                return true;
+            }).sort((a, b) => {
+                if (currentFilterState.sort === 'trust') return b.trustScore - a.trustScore;
+                if (currentFilterState.sort === 'distance') return a.distanceNum - b.distanceNum;
+                if (currentFilterState.sort === 'price') return a.priceNum - b.priceNum;
+                return b.rating - a.rating; // Default recommended
+            });
+        }
+
+        function applyFilters() {
+            currentFilterState.distance = document.getElementById('filterDistance').value;
+            currentFilterState.rating = document.getElementById('filterRating').value;
+            currentFilterState.availability = document.getElementById('filterAvailability').value;
+            currentFilterState.sort = document.getElementById('sortOrder').value;
+
+            const filtered = getFilteredData();
+            renderProviderCards(filtered);
+            renderMapPins(filtered);
+        }
+
+        function handleFilterSearch() {
+            currentFilterState.query = document.getElementById('searchInput').value.trim();
+            applyFilters();
+        }
+
+        function handleLocationChange() {
+            const loc = document.getElementById('locationSelect').value;
+            document.getElementById('activeAreaLabel').innerText = loc;
+            applyFilters();
+        }
+
+        function toggleVerifiedFilter() {
+            currentFilterState.verifiedOnly = !currentFilterState.verifiedOnly;
+            const btn = document.getElementById('toggleVerified');
+            const dot = document.getElementById('verifiedDot');
+            if (currentFilterState.verifiedOnly) {
+                btn.classList.replace('border-gray-200', 'border-emerald-500');
+                btn.classList.add('bg-emerald-50', 'text-emerald-700');
+                dot.classList.replace('bg-gray-300', 'bg-emerald-500');
+            } else {
+                btn.classList.replace('border-emerald-500', 'border-gray-200');
+                btn.classList.remove('bg-emerald-50', 'text-emerald-700');
+                dot.classList.replace('bg-emerald-500', 'bg-gray-300');
+            }
+            applyFilters();
+        }
+
+        function toggleTrustScoreFilter() {
+            currentFilterState.trustScoreOnly = !currentFilterState.trustScoreOnly;
+            const btn = document.getElementById('btnTrustScore');
+            if (currentFilterState.trustScoreOnly) {
+                btn.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-700');
+            } else {
+                btn.classList.remove('bg-emerald-50', 'border-emerald-500', 'text-emerald-700');
+            }
+            applyFilters();
+        }
+
+        function resetFilters() {
+            currentFilterState = {
+                query: "Plumber",
+                location: "Benin City",
+                verifiedOnly: false,
+                trustScoreOnly: false,
+                distance: "all",
+                rating: "all",
+                availability: "all",
+                sort: "recommended"
+            };
+            document.getElementById('searchInput').value = "Plumber";
+            document.getElementById('filterDistance').value = "all";
+            document.getElementById('filterRating').value = "all";
+            document.getElementById('filterAvailability').value = "all";
+            applyFilters();
+        }
+
+        // Booking Modal Handlers
+        function openBookingModal(proId, e) {
+            if(e) e.stopPropagation();
+            const pro = plumbers.find(p => p.id === proId);
+            if(!pro) return;
+
+            document.getElementById('modalProName').innerText = pro.name;
+            document.getElementById('modalProTitle').innerText = pro.title;
+            document.getElementById('modalProImg').src = pro.image;
+            document.getElementById('modalProRating').innerText = `${pro.rating} ★ (${pro.reviews} reviews)`;
+            document.getElementById('modalProJobs').innerText = `${pro.completedJobs} jobs`;
+            document.getElementById('modalProDistance').innerText = `${pro.distance} away`;
+            document.getElementById('modalProPrice').innerText = pro.price;
+            document.getElementById('modalTotalPay').innerText = pro.price.split('/')[0];
+
+            document.getElementById('bookingModal').classList.remove('hidden');
+        }
+
+        function closeBookingModal() {
+            document.getElementById('bookingModal').classList.add('hidden');
+        }
+
+        function confirmBooking() {
+            alert('🎉 Booking Confirmed! Your local plumber will contact you via LIFELINK shortly.');
+            closeBookingModal();
+        }
+
+        // Map Interaction Helpers
+        function zoomMap(delta) {
+            alert(delta > 0 ? 'Zooming map in on Benin City Hub...' : 'Zooming map out...');
+        }
+
+        function recenterMap() {
+            alert('Map recentered to Ring Road, Benin City');
+        }
+
+        // Initialize Page Data
+        window.onload = function() {
+            renderProviderCards(plumbers);
+            renderMapPins(plumbers);
+        };
+    </script>
+<script src="lifelink.js"></script>
+</body>
+</html>

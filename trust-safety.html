@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trust & Safety Center — LIFELINK</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            emerald: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              200: '#a7f3d0',
+              300: '#6ee7b7',
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+            },
+            slate: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#0f172a',
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          boxShadow: {
+            'xs': '0 1px 2px 0 rgba(15, 23, 42, 0.04)',
+            'subtle': '0 4px 20px -2px rgba(15, 23, 42, 0.05)',
+            'emerald-glow': '0 8px 24px -4px rgba(5, 150, 105, 0.25)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #F8FAFC;
+      color: #0F172A;
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+
+    /* Modal Backdrop Blur */
+    .modal-backdrop {
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(6px);
+    }
+
+    /* Pulse Ring Effect */
+    @keyframes pulse-ring {
+      0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
+      }
+      70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 12px rgba(16, 185, 129, 0);
+      }
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+      }
+    }
+
+    .pulse-badge {
+      animation: pulse-ring 2.5s infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-50 antialiased selection:bg-emerald-100 selection:text-emerald-900" data-ll-page="trust" data-ll-role="public">
+
+  <!-- TOP NAVIGATION HEADER -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Brand & Section Label -->
+      <div class="flex items-center gap-3">
+        <a href="#" class="flex items-center gap-2.5 group">
+          <img src="images/lifelink-logo.png" alt="LifeLink" class="h-10 w-auto object-contain">
+          <div>
+            <span class="text-[10px] font-bold text-slate-400 tracking-wider uppercase block mt-0.5">Trust & Safety</span>
+          </div>
+        </a>
+
+        <!-- Divider -->
+        <div class="hidden md:block h-6 w-px bg-slate-200"></div>
+
+        <!-- Breadcrumb Navigation -->
+        <nav class="hidden md:flex items-center gap-2 text-xs font-semibold text-slate-500">
+          <a href="#" class="hover:text-emerald-600 transition">Dashboard</a>
+          <svg class="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></nav>
+          <a href="#" class="hover:text-emerald-600 transition">Security</a>
+          <svg class="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></nav>
+          <span class="text-slate-900 font-extrabold">Trust & Safety Center</span>
+        </nav>
+      </div>
+
+      <!-- Right Header Tools & User Profile -->
+      <div class="flex items-center gap-3">
+        
+        <!-- Emergency Support Fast Button -->
+        <button onclick="openSupportModal()" class="hidden sm:inline-flex items-center gap-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-extrabold px-3 py-1.5 rounded-xl border border-rose-200 transition">
+          <svg class="w-3.5 h-3.5 text-rose-600 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+          <span>Safety Hotline</span>
+        </button>
+
+        <!-- User Verified Profile Pill -->
+        <div class="flex items-center gap-2.5 bg-slate-100 hover:bg-slate-200/80 p-1.5 pr-3 rounded-full border border-slate-200 transition cursor-pointer">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120" alt="Daniel O." class="w-7 h-7 rounded-full object-cover border border-emerald-500">
+          <div class="text-left">
+            <div class="text-xs font-extrabold text-slate-900 leading-tight flex items-center gap-1">
+              <span>Daniel O.</span>
+              <svg class="w-3.5 h-3.5 text-emerald-600 fill-current" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <span class="text-[10px] font-semibold text-emerald-700 block leading-none">Verified Account</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- PAGE HEADER TITLE & SEARCH BAR -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-slate-200/80">
+      <div class="space-y-1.5">
+        <div class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-800 text-xs font-extrabold px-3 py-1 rounded-full border border-emerald-200">
+          <svg class="w-3.5 h-3.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M2.166 11.388a.75.75 0 011.096-.043l2.8 2.8a.75.75 0 001.06 0l8.75-8.75a.75.75 0 111.06 1.06l-8.75 8.75a2.25 2.25 0 01-3.182 0l-2.8-2.8a.75.75 0 01-.034-1.017z" clip-rule="evenodd"/>
+          </svg>
+          <span>Bank-Grade Escrow & ID Verification</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Trust & Safety</h1>
+        <p class="text-sm sm:text-base font-semibold text-slate-500">Your safety and confidence matter to us.</p>
+      </div>
+
+      <!-- Quick Topic Search Bar -->
+      <div class="relative w-full md:w-80 shrink-0">
+        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+        <input type="text" id="safetySearchInput" onkeyup="filterSafetyTopics()" placeholder="Search safety topics or rules..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 shadow-xs transition-all">
+      </div>
+    </div>
+
+    <!-- ACCOUNT SAFETY STATUS BANNER CARD -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-subtle relative overflow-hidden">
+      <!-- Emerald Background Top Accent Bar -->
+      <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-500"></div>
+      
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        
+        <!-- Status Title & Shield Graphic -->
+        <div class="flex items-start gap-4">
+          <div class="relative shrink-0">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-200/80 shadow-xs pulse-badge">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+              </svg>
+            </div>
+            <!-- Check Badge Overlay -->
+            <div class="absolute -bottom-1 -right-1 bg-emerald-600 text-white rounded-full p-1 ring-2 ring-white shadow-xs">
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Your account is protected</h2>
+              <span class="bg-emerald-100 text-emerald-800 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-200">
+                Active Tier 1 Shield
+              </span>
+            </div>
+            <p class="text-xs sm:text-sm font-semibold text-slate-500 max-w-xl">
+              All your requests, messages, and payments are protected under LIFELINK's escrow policy and identity verification guarantee.
+            </p>
+          </div>
+        </div>
+
+        <!-- Manage Security Action Button -->
+        <button onclick="showToast('Security settings up to date!')" class="shrink-0 bg-slate-900 hover:bg-slate-800 active:bg-black text-white font-extrabold text-xs px-5 py-3 rounded-xl shadow-md transition-all self-start lg:self-center">
+          Manage Account Security
+        </button>
+
+      </div>
+
+      <!-- Verified Pillars Grid -->
+      <div class="mt-6 pt-6 border-t border-slate-100 grid grid-cols-2 md:grid-cols-4 gap-4">
+        
+        <div class="bg-slate-50/80 p-3.5 rounded-2xl border border-slate-200/80 flex items-center justify-between">
+          <div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Phone Verification</span>
+            <span class="text-xs font-extrabold text-slate-800">080***4821</span>
+          </div>
+          <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs shrink-0">✓</span>
+        </div>
+
+        <div class="bg-slate-50/80 p-3.5 rounded-2xl border border-slate-200/80 flex items-center justify-between">
+          <div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Email Address</span>
+            <span class="text-xs font-extrabold text-slate-800">d***@gmail.com</span>
+          </div>
+          <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs shrink-0">✓</span>
+        </div>
+
+        <div class="bg-slate-50/80 p-3.5 rounded-2xl border border-slate-200/80 flex items-center justify-between">
+          <div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Account Security</span>
+            <span class="text-xs font-extrabold text-emerald-700">2FA Active</span>
+          </div>
+          <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs shrink-0">✓</span>
+        </div>
+
+        <div class="bg-slate-50/80 p-3.5 rounded-2xl border border-slate-200/80 flex items-center justify-between">
+          <div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Payment Protection</span>
+            <span class="text-xs font-extrabold text-emerald-700">Escrow Enabled</span>
+          </div>
+          <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs shrink-0">✓</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- MAIN CONTENT LAYOUT (2-COLUMN GRID) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+      <!-- LEFT COLUMN: WIDE INFORMATION (8 COLS) -->
+      <div class="lg:col-span-8 space-y-8">
+
+        <!-- 1. PROVIDER VERIFICATION SECTION -->
+        <section class="searchable-card bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-6">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+            <div class="space-y-1">
+              <span class="text-xs font-extrabold text-emerald-600 uppercase tracking-wider">Vetting Protocol</span>
+              <h3 class="text-xl font-extrabold text-slate-900">Provider Verification</h3>
+            </div>
+            <span class="text-xs font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1 rounded-full">
+              4-Step Vetting
+            </span>
+          </div>
+
+          <p class="text-xs sm:text-sm font-semibold text-slate-600 leading-relaxed">
+            Every professional listed on LIFELINK undergoes rigorous screening before receiving bids or contacting clients. We verify identity, operational standards, and legal compliance.
+          </p>
+
+          <!-- 4 Vetting Step Cards Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            
+            <div class="bg-slate-50/70 p-4 rounded-2xl border border-slate-200/80 space-y-2 hover:border-emerald-300 transition">
+              <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-extrabold text-xs">
+                01
+              </div>
+              <h4 class="text-sm font-extrabold text-slate-900">Government ID & NIN Check</h4>
+              <p class="text-xs font-semibold text-slate-500">
+                Biometric cross-match against national databases (NIN, Driver’s License, or Voters Card).
+              </p>
+            </div>
+
+            <div class="bg-slate-50/70 p-4 rounded-2xl border border-slate-200/80 space-y-2 hover:border-emerald-300 transition">
+              <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-extrabold text-xs">
+                02
+              </div>
+              <h4 class="text-sm font-extrabold text-slate-900">Physical Address Audit</h4>
+              <p class="text-xs font-semibold text-slate-500">
+                In-person or GPS-verified physical address mapping in Benin City and surrounding regions.
+              </p>
+            </div>
+
+            <div class="bg-slate-50/70 p-4 rounded-2xl border border-slate-200/80 space-y-2 hover:border-emerald-300 transition">
+              <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-extrabold text-xs">
+                03
+              </div>
+              <h4 class="text-sm font-extrabold text-slate-900">Background Screening</h4>
+              <p class="text-xs font-semibold text-slate-500">
+                Evaluation of past service history, fraud databases, and community trust flags.
+              </p>
+            </div>
+
+            <div class="bg-slate-50/70 p-4 rounded-2xl border border-slate-200/80 space-y-2 hover:border-emerald-300 transition">
+              <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-extrabold text-xs">
+                04
+              </div>
+              <h4 class="text-sm font-extrabold text-slate-900">Trade Skill Assessment</h4>
+              <p class="text-xs font-semibold text-slate-500">
+                Verification of trade certifications, apprenticeships, and technical qualifications.
+              </p>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- 2. PROFESSIONAL TRUST SCORE SECTION -->
+        <section class="searchable-card bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-6">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+            <div class="space-y-1">
+              <span class="text-xs font-extrabold text-emerald-600 uppercase tracking-wider">Dynamic Rating System</span>
+              <h3 class="text-xl font-extrabold text-slate-900">Professional Trust Score</h3>
+            </div>
+            <span class="text-xs font-bold text-slate-500">
+              Score Range: 0 - 100
+            </span>
+          </div>
+
+          <p class="text-xs sm:text-sm font-semibold text-slate-600 leading-relaxed">
+            Trust Scores combine verification, completed jobs, ratings, response time, reliability and other signals into a single transparent score.
+          </p>
+
+          <!-- Interactive Trust Score Widget Box -->
+          <div class="bg-slate-900 text-white rounded-3xl p-6 sm:p-7 space-y-6 relative overflow-hidden">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-b border-slate-800 pb-6">
+              
+              <!-- Left Score Preview -->
+              <div class="flex items-center gap-4">
+                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-emerald-600/20 border-2 border-emerald-500 flex flex-col items-center justify-center shrink-0">
+                  <span class="text-2xl sm:text-3xl font-extrabold text-emerald-400 leading-none">94</span>
+                  <span class="text-[9px] font-bold text-emerald-200 tracking-wider uppercase mt-1">/ 100</span>
+                </div>
+                <div>
+                  <h4 class="text-base sm:text-lg font-extrabold text-white">Chuks Electrical</h4>
+                  <p class="text-xs font-semibold text-emerald-400 flex items-center gap-1.5 mt-0.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Verified Top Tier Provider (187 Jobs)
+                  </p>
+                </div>
+              </div>
+
+              <div class="text-left sm:text-right">
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Trust Status</span>
+                <span class="text-xs font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-3 py-1 rounded-full inline-block mt-1">
+                  Highly Trusted
+                </span>
+              </div>
+            </div>
+
+            <!-- Trust Signals Breakdown Sliders -->
+            <div class="space-y-4">
+              <h5 class="text-xs font-extrabold text-slate-300 uppercase tracking-wider">Trust Score Signal Breakdown</h5>
+
+              <div class="space-y-3 text-xs">
+                
+                <!-- Signal 1 -->
+                <div>
+                  <div class="flex justify-between font-bold text-slate-300 mb-1">
+                    <span>Identity & Business Verification (25% Weight)</span>
+                    <span class="text-emerald-400">100% Complete</span>
+                  </div>
+                  <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                    <div class="bg-emerald-500 h-full rounded-full" style="width: 100%"></div>
+                  </div>
+                </div>
+
+                <!-- Signal 2 -->
+                <div>
+                  <div class="flex justify-between font-bold text-slate-300 mb-1">
+                    <span>Job Completion & Success Rate (25% Weight)</span>
+                    <span class="text-emerald-400">98% Success</span>
+                  </div>
+                  <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                    <div class="bg-emerald-500 h-full rounded-full" style="width: 98%"></div>
+                  </div>
+                </div>
+
+                <!-- Signal 3 -->
+                <div>
+                  <div class="flex justify-between font-bold text-slate-300 mb-1">
+                    <span>Verified Customer Ratings (20% Weight)</span>
+                    <span class="text-emerald-400">4.9 / 5.0 Stars</span>
+                  </div>
+                  <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                    <div class="bg-emerald-500 h-full rounded-full" style="width: 96%"></div>
+                  </div>
+                </div>
+
+                <!-- Signal 4 -->
+                <div>
+                  <div class="flex justify-between font-bold text-slate-300 mb-1">
+                    <span>Punctuality & Reliability (15% Weight)</span>
+                    <span class="text-emerald-400">92% On-Time</span>
+                  </div>
+                  <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                    <div class="bg-emerald-500 h-full rounded-full" style="width: 92%"></div>
+                  </div>
+                </div>
+
+                <!-- Signal 5 -->
+                <div>
+                  <div class="flex justify-between font-bold text-slate-300 mb-1">
+                    <span>Average Response Time (15% Weight)</span>
+                    <span class="text-emerald-400">&lt; 15 mins</span>
+                  </div>
+                  <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                    <div class="bg-emerald-500 h-full rounded-full" style="width: 90%"></div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- 3. BOOKING & ESCROW PROTECTION SECTION -->
+        <section class="searchable-card bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-6">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+            <div class="space-y-1">
+              <span class="text-xs font-extrabold text-emerald-600 uppercase tracking-wider">Financial Safety</span>
+              <h3 class="text-xl font-extrabold text-slate-900">Booking Protection & Escrow</h3>
+            </div>
+            <span class="text-xs font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1 rounded-full">
+              Zero Financial Risk
+            </span>
+          </div>
+
+          <p class="text-xs sm:text-sm font-semibold text-slate-600 leading-relaxed">
+            LIFELINK protects your money during every booking using our automated escrow protection system. Payment is only transferred to the professional after you verify the job is complete.
+          </p>
+
+          <!-- 3-Step Escrow Lock Flow -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+            
+            <div class="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-200/80 space-y-2 relative">
+              <span class="text-[10px] font-extrabold text-emerald-800 uppercase tracking-wider">Step 1</span>
+              <h4 class="text-sm font-extrabold text-slate-900">100% Escrow Deposit</h4>
+              <p class="text-xs font-semibold text-slate-600">
+                Funds are held in a regulated escrow account when you confirm a quote.
+              </p>
+            </div>
+
+            <div class="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-200/80 space-y-2 relative">
+              <span class="text-[10px] font-extrabold text-emerald-800 uppercase tracking-wider">Step 2</span>
+              <h4 class="text-sm font-extrabold text-slate-900">Service Executed</h4>
+              <p class="text-xs font-semibold text-slate-600">
+                The provider completes the job while your money remains completely secure.
+              </p>
+            </div>
+
+            <div class="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-200/80 space-y-2 relative">
+              <span class="text-[10px] font-extrabold text-emerald-800 uppercase tracking-wider">Step 3</span>
+              <h4 class="text-sm font-extrabold text-slate-900">Customer Authorization</h4>
+              <p class="text-xs font-semibold text-slate-600">
+                You inspect the work and click "Release Funds". Dispute window remains open 24/7.
+              </p>
+            </div>
+
+          </div>
+
+          <!-- Guarantee SLA Callout Box -->
+          <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <div>
+                <h4 class="text-xs sm:text-sm font-extrabold text-slate-900">24–48 Hour Dispute Resolution Guarantee</h4>
+                <p class="text-xs font-semibold text-slate-500">If a service does not meet agreed specifications, funds are withheld until resolved.</p>
+              </div>
+            </div>
+            <button onclick="openGuidelinesModal()" class="text-xs font-extrabold text-emerald-700 hover:text-emerald-800 whitespace-nowrap">
+              Read Policy →
+            </button>
+          </div>
+        </section>
+
+        <!-- 4. "BEFORE BOOKING" CHECKLIST CARD -->
+        <section class="searchable-card bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-6">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+            <div class="space-y-1">
+              <span class="text-xs font-extrabold text-emerald-600 uppercase tracking-wider">Customer Safety Checklist</span>
+              <h3 class="text-xl font-extrabold text-slate-900">Before Booking Checklist</h3>
+            </div>
+            
+            <!-- Preparedness Gauge -->
+            <div class="text-right">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Safety Preparedness</span>
+              <span id="checklistScore" class="text-xs font-extrabold text-emerald-600">100% Ready</span>
+            </div>
+          </div>
+
+          <p class="text-xs sm:text-sm font-semibold text-slate-600">
+            Follow these 5 essential steps before accepting any quote to ensure maximum security:
+          </p>
+
+          <!-- Interactive Checklist -->
+          <div class="space-y-3" id="checklistGroup">
+            
+            <label class="flex items-center gap-3.5 p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 cursor-pointer hover:border-emerald-300 transition">
+              <input type="checkbox" checked onchange="updateChecklist()" class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 accent-emerald-600">
+              <span class="text-xs sm:text-sm font-bold text-slate-800">Check for the green "Verified" badge on provider profiles</span>
+            </label>
+
+            <label class="flex items-center gap-3.5 p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 cursor-pointer hover:border-emerald-300 transition">
+              <input type="checkbox" checked onchange="updateChecklist()" class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 accent-emerald-600">
+              <span class="text-xs sm:text-sm font-bold text-slate-800">Review Trust Score (we recommend providers with 85+ Trust Score)</span>
+            </label>
+
+            <label class="flex items-center gap-3.5 p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 cursor-pointer hover:border-emerald-300 transition">
+              <input type="checkbox" checked onchange="updateChecklist()" class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 accent-emerald-600">
+              <span class="text-xs sm:text-sm font-bold text-slate-800">Read verified customer reviews from recent completed jobs</span>
+            </label>
+
+            <label class="flex items-center gap-3.5 p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 cursor-pointer hover:border-emerald-300 transition">
+              <input type="checkbox" checked onchange="updateChecklist()" class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 accent-emerald-600">
+              <span class="text-xs sm:text-sm font-bold text-slate-800">Confirm total price range in writing before work begins</span>
+            </label>
+
+            <label class="flex items-center gap-3.5 p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 cursor-pointer hover:border-emerald-300 transition">
+              <input type="checkbox" checked onchange="updateChecklist()" class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 accent-emerald-600">
+              <span class="text-xs sm:text-sm font-bold text-slate-800">Keep all communication and payments strictly inside LIFELINK</span>
+            </label>
+
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="space-y-1 pt-1">
+            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+              <div id="checklistProgressBar" class="bg-emerald-600 h-full transition-all duration-300" style="width: 100%"></div>
+            </div>
+            <p id="checklistFeedback" class="text-[11px] font-semibold text-emerald-700 text-right">
+              All safety precautions verified!
+            </p>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- RIGHT COLUMN: SIDEBAR TOOLS & SECURITY SUMMARY (4 COLS) -->
+      <div class="lg:col-span-4 space-y-8">
+
+        <!-- 1. SAFETY TOOLS PANEL -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-xs space-y-4 sticky top-24">
+          <div class="border-b border-slate-100 pb-3">
+            <h3 class="text-base font-extrabold text-slate-900">Safety Tools & Actions</h3>
+            <p class="text-xs font-semibold text-slate-500">Fast assistance and dispute reporting</p>
+          </div>
+
+          <div class="space-y-2.5">
+            
+            <button onclick="openReportProviderModal()" class="w-full flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 transition text-left group">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-200/80">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                  </svg>
+                </div>
+                <div>
+                  <span class="text-xs font-extrabold text-slate-900 block">Report a Provider</span>
+                  <span class="text-[10px] font-semibold text-slate-500 block">Unprofessional conduct or delay</span>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+
+            <button onclick="openReportSuspiciousModal()" class="w-full flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 transition text-left group">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 border border-rose-200/80">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+                  </svg>
+                </div>
+                <div>
+                  <span class="text-xs font-extrabold text-slate-900 block">Report Suspicious Activity</span>
+                  <span class="text-[10px] font-semibold text-slate-500 block">Off-platform payment attempts</span>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+
+            <button onclick="openSupportModal()" class="w-full flex items-center justify-between p-3.5 rounded-2xl bg-emerald-50/80 hover:bg-emerald-100/80 border border-emerald-200/80 transition text-left group">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+                  </svg>
+                </div>
+                <div>
+                  <span class="text-xs font-extrabold text-emerald-900 block">Contact 24/7 Safety Support</span>
+                  <span class="text-[10px] font-semibold text-emerald-700 block">Instant emergency escalation</span>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-emerald-600 group-hover:translate-x-0.5 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+
+            <button onclick="openGuidelinesModal()" class="w-full flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 transition text-left group">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center shrink-0 border border-slate-200">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                  </svg>
+                </div>
+                <div>
+                  <span class="text-xs font-extrabold text-slate-900 block">View Safety Guidelines</span>
+                  <span class="text-[10px] font-semibold text-slate-500 block">Community standards & rules</span>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+
+          </div>
+
+          <!-- 2. ACCOUNT SECURITY SUMMARY -->
+          <div class="pt-4 border-t border-slate-100 space-y-3">
+            <h4 class="text-xs font-extrabold text-slate-900 uppercase tracking-wider">Account Security Audit</h4>
+            
+            <div class="space-y-2 text-xs font-semibold text-slate-600">
+              <div class="flex justify-between">
+                <span class="text-slate-400">Security Score:</span>
+                <span class="font-bold text-emerald-600">100% Protected</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Last Password Change:</span>
+                <span class="text-slate-800">12 days ago</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Active Login Sessions:</span>
+                <span class="text-slate-800">2 Devices (Benin City)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. LIFELINK GUARANTEES CARD -->
+          <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-4 space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span class="text-xs font-extrabold tracking-wider uppercase">LIFELINK Security Standard</span>
+            </div>
+            <p class="text-[11px] font-semibold text-slate-300 leading-snug">
+              256-Bit SSL Data Encryption • Bank-Grade Escrow Vaults • Physical Address Audits
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-slate-200 mt-12 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-semibold text-slate-500">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-extrabold text-xs">L</div>
+        <span>© 2026 LIFELINK Technologies. All rights reserved.</span>
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="#" onclick="openGuidelinesModal()" class="hover:text-emerald-600 transition">Terms of Service</a>
+        <a href="#" onclick="openGuidelinesModal()" class="hover:text-emerald-600 transition">Privacy Policy</a>
+        <a href="#" onclick="openSupportModal()" class="hover:text-emerald-600 transition">Safety Center Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== MODALS CONTAINER ==================== -->
+
+  <!-- MODAL 1: REPORT A PROVIDER -->
+  <div id="reportProviderModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <div onclick="closeModal('reportProviderModal')" class="absolute inset-0 modal-backdrop"></div>
+    <div class="relative bg-white rounded-3xl max-w-lg w-full mx-4 p-6 sm:p-8 border border-slate-200 shadow-2xl space-y-6 z-10">
+      
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div>
+          <h3 class="text-xl font-extrabold text-slate-900">Report a Provider</h3>
+          <p class="text-xs font-bold text-slate-400 mt-0.5">Submit an official complaint to Safety Operations</p>
+        </div>
+        <button onclick="closeModal('reportProviderModal')" class="p-1 text-slate-400 hover:text-slate-600 rounded-lg">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form onsubmit="submitReportForm(event, 'Provider Report Submitted')" class="space-y-4 text-xs sm:text-sm font-semibold">
+        <div>
+          <label class="block text-slate-700 font-bold mb-1">Select Issue Category</label>
+          <select required class="w-full p-3 rounded-xl border border-slate-200 bg-slate-50 font-semibold text-slate-800 focus:outline-none focus:border-emerald-500">
+            <option value="">Choose issue type...</option>
+            <option value="delay">Provider did not show up on time</option>
+            <option value="behavior">Unprofessional or disrespectful conduct</option>
+            <option value="price">Price discrepancy or extra charge request</option>
+            <option value="quality">Poor quality of work executed</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-slate-700 font-bold mb-1">Booking ID or Provider Name</label>
+          <input type="text" required placeholder="e.g. #LL-8920 or Chuks Electrical" class="w-full p-3 rounded-xl border border-slate-200 bg-slate-50 font-semibold text-slate-800 focus:outline-none focus:border-emerald-500">
+        </div>
+
+        <div>
+          <label class="block text-slate-700 font-bold mb-1">Detailed Description</label>
+          <textarea rows="3" required placeholder="Please provide specific details about what happened..." class="w-full p-3 rounded-xl border border-slate-200 bg-slate-50 font-semibold text-slate-800 focus:outline-none focus:border-emerald-500"></textarea>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-3">
+          <button type="button" onclick="closeModal('reportProviderModal')" class="px-5 py-3 rounded-xl border border-slate-200 text-slate-700 font-extrabold hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="px-6 py-3 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-extrabold shadow-md shadow-amber-600/20">Submit Report</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- MODAL 2: REPORT SUSPICIOUS ACTIVITY -->
+  <div id="reportSuspiciousModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <div onclick="closeModal('reportSuspiciousModal')" class="absolute inset-0 modal-backdrop"></div>
+    <div class="relative bg-white rounded-3xl max-w-lg w-full mx-4 p-6 sm:p-8 border border-slate-200 shadow-2xl space-y-6 z-10">
+      
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div>
+          <h3 class="text-xl font-extrabold text-slate-900">Report Suspicious Activity</h3>
+          <p class="text-xs font-bold text-slate-400 mt-0.5">Off-platform payment requests or fraud attempts</p>
+        </div>
+        <button onclick="closeModal('reportSuspiciousModal')" class="p-1 text-slate-400 hover:text-slate-600 rounded-lg">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form onsubmit="submitReportForm(event, 'Security Threat Flagged')" class="space-y-4 text-xs sm:text-sm font-semibold">
+        <div>
+          <label class="block text-slate-700 font-bold mb-1">Suspicious Category</label>
+          <select required class="w-full p-3 rounded-xl border border-slate-200 bg-slate-50 font-semibold text-slate-800 focus:outline-none focus:border-emerald-500">
+            <option value="">Choose category...</option>
+            <option value="off_platform">Provider asked for direct cash/bank transfer outside LIFELINK</option>
+            <option value="phishing">Suspicious link or WhatsApp redirect</option>
+            <option value="impersonation">Fake profile or fake identity</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-slate-700 font-bold mb-1">Additional Evidence / Chat Screenshots</label>
+          <input type="text" placeholder="Describe or paste phone number / account details..." class="w-full p-3 rounded-xl border border-slate-200 bg-slate-50 font-semibold text-slate-800 focus:outline-none focus:border-emerald-500">
+        </div>
+
+        <div class="bg-rose-50 p-3.5 rounded-xl border border-rose-200 text-xs font-semibold text-rose-800">
+          ⚠️ Never send money directly to a provider's personal bank account. Doing so voids your LIFELINK escrow guarantee.
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-3">
+          <button type="button" onclick="closeModal('reportSuspiciousModal')" class="px-5 py-3 rounded-xl border border-slate-200 text-slate-700 font-extrabold hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="px-6 py-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold shadow-md shadow-rose-600/20">Flag Threat</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- MODAL 3: 24/7 SAFETY SUPPORT & LIVE ESCALATION -->
+  <div id="supportModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <div onclick="closeModal('supportModal')" class="absolute inset-0 modal-backdrop"></div>
+    <div class="relative bg-white rounded-3xl max-w-md w-full mx-4 p-6 sm:p-8 border border-slate-200 shadow-2xl space-y-6 z-10">
+      
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+        <div class="flex items-center gap-2.5">
+          <div class="w-3 h-3 rounded-full bg-emerald-500 animate-ping"></div>
+          <div>
+            <h3 class="text-lg font-extrabold text-slate-900">Safety Desk Active</h3>
+            <p class="text-[10px] font-bold text-emerald-700 uppercase">Average Response: &lt; 2 mins</p>
+          </div>
+        </div>
+        <button onclick="closeModal('supportModal')" class="p-1 text-slate-400 hover:text-slate-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs font-semibold text-slate-700">
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-slate-400 font-bold">Direct Emergency Hotline:</span>
+            <span class="font-extrabold text-slate-900">+234 (0) 800-LIFELINK</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-slate-400 font-bold">Escrow Freeze Hotline:</span>
+            <span class="font-extrabold text-emerald-700">Freeze Active Booking</span>
+          </div>
+        </div>
+
+        <button onclick="simulateSupportChat()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 rounded-xl shadow-md shadow-emerald-600/20 transition">
+          Start Live Priority Chat
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL 4: SAFETY GUIDELINES READER -->
+  <div id="guidelinesModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <div onclick="closeModal('guidelinesModal')" class="absolute inset-0 modal-backdrop"></div>
+    <div class="relative bg-white rounded-3xl max-w-2xl w-full mx-4 p-6 sm:p-8 border border-slate-200 shadow-2xl space-y-6 z-10 max-h-[85vh] flex flex-col">
+      
+      <div class="flex items-center justify-between border-b border-slate-100 pb-4 shrink-0">
+        <div>
+          <h3 class="text-xl font-extrabold text-slate-900">LIFELINK Safety Guidelines</h3>
+          <p class="text-xs font-bold text-slate-400 mt-0.5">Community standards for Benin City & nationwide services</p>
+        </div>
+        <button onclick="closeModal('guidelinesModal')" class="p-1 text-slate-400 hover:text-slate-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="overflow-y-auto space-y-4 text-xs sm:text-sm font-semibold text-slate-600 pr-2">
+        <h4 class="font-extrabold text-slate-900 text-base">1. In-App Communication Mandate</h4>
+        <p>All client and provider discussions regarding job scope, price modifications, or arrival schedules must be conducted within LIFELINK chat. Messages are encrypted and serve as legal evidence during dispute resolution.</p>
+
+        <h4 class="font-extrabold text-slate-900 text-base">2. Escrow Payment Rules</h4>
+        <p>Never pay cash or transfer funds directly to a technician's bank account. Always fund the booking through the LIFELINK application to keep your escrow protection active.</p>
+
+        <h4 class="font-extrabold text-slate-900 text-base">3. Verification & Badging</h4>
+        <p>Only allow professionals into your home or premises if their physical identity matches the picture and details shown in your LIFELINK active booking card.</p>
+      </div>
+
+      <div class="pt-4 border-t border-slate-100 shrink-0 text-right">
+        <button onclick="closeModal('guidelinesModal')" class="px-6 py-2.5 rounded-xl bg-slate-900 text-white font-extrabold text-xs">I Understand</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white text-xs font-bold px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2.5 translate-y-20 opacity-0 transition-all duration-300">
+    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+    <span id="toastText">Action completed successfully!</span>
+  </div>
+
+  <!-- INTERACTIVE JAVASCRIPT LOGIC -->
+  <script>
+    
+    // Live Search Filter for Safety Topics
+    function filterSafetyTopics() {
+      const query = document.getElementById('safetySearchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('.searchable-card');
+
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        if (text.includes(query)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Dynamic Before-Booking Checklist Progress Update
+    function updateChecklist() {
+      const checkboxes = document.querySelectorAll('#checklistGroup input[type="checkbox"]');
+      let checkedCount = 0;
+
+      checkboxes.forEach(cb => {
+        if (cb.checked) checkedCount++;
+      });
+
+      const percentage = Math.round((checkedCount / checkboxes.length) * 100);
+      const progressBar = document.getElementById('checklistProgressBar');
+      const scoreText = document.getElementById('checklistScore');
+      const feedbackText = document.getElementById('checklistFeedback');
+
+      progressBar.style.width = percentage + '%';
+      
+      if (percentage === 100) {
+        scoreText.innerText = '100% Ready';
+        scoreText.className = 'text-xs font-extrabold text-emerald-600';
+        feedbackText.innerText = 'All safety precautions verified!';
+        feedbackText.className = 'text-[11px] font-semibold text-emerald-700 text-right';
+      } else {
+        scoreText.innerText = percentage + '% Prepared';
+        scoreText.className = 'text-xs font-extrabold text-amber-600';
+        feedbackText.innerText = 'Complete remaining checks before confirming quotes.';
+        feedbackText.className = 'text-[11px] font-semibold text-amber-600 text-right';
+      }
+    }
+
+    // Modal Display Controls
+    function openReportProviderModal() {
+      document.getElementById('reportProviderModal').classList.remove('hidden');
+    }
+
+    function openReportSuspiciousModal() {
+      document.getElementById('reportSuspiciousModal').classList.remove('hidden');
+    }
+
+    function openSupportModal() {
+      document.getElementById('supportModal').classList.remove('hidden');
+    }
+
+    function openGuidelinesModal() {
+      document.getElementById('guidelinesModal').classList.remove('hidden');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.add('hidden');
+    }
+
+    // Form Submissions
+    function submitReportForm(e, toastMessage) {
+      e.preventDefault();
+      closeModal('reportProviderModal');
+      closeModal('reportSuspiciousModal');
+      showToast(toastMessage);
+    }
+
+    function simulateSupportChat() {
+      closeModal('supportModal');
+      showToast('Connecting to Senior Safety Agent...');
+    }
+
+    // Toast Notification Utility
+    function showToast(message) {
+      const toast = document.getElementById('toastNotification');
+      const toastText = document.getElementById('toastText');
+
+      toastText.innerText = message;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+
+    // ESC Key Modal Dismiss
+    document.addEventListener('keydown', function(event) {
+      if (event.key === "Escape") {
+        closeModal('reportProviderModal');
+        closeModal('reportSuspiciousModal');
+        closeModal('supportModal');
+        closeModal('guidelinesModal');
+      }
+    });
+  </script>
+<script src="lifelink.js"></script>
+</body>
+</html>

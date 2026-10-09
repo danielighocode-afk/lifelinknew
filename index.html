@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LIFELINK — Find. Book. Get It Done.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            emerald: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              200: '#a7f3d0',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+            },
+            slate: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#0f172a',
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #F8FAFC;
+      color: #0F172A;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    /* Light-themed background image hero with bright white/slate overlay */
+    .hero-bg-light {
+      background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.92), rgba(248, 250, 252, 0.96)), url('https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=1920');
+      background-size: cover;
+      background-position: center;
+    }
+    .input-focus-effect:focus-within {
+      border-color: #059669;
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.12);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-50 antialiased selection:bg-emerald-100 selection:text-emerald-800" data-ll-page="home" data-ll-role="public">
+
+  <!-- TOP HEADER NAVIGATION -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-40 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3">
+        <img src="images/lifelink-logo.png" alt="LifeLink" class="h-12 w-auto object-contain">
+      </div>
+
+      <!-- Center Navigation Links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-extrabold text-slate-600">
+        <a href="#" class="text-emerald-600 hover:text-emerald-700 transition">Home</a>
+        <a href="#" class="hover:text-emerald-600 transition">Services</a>
+        <a href="#" class="hover:text-emerald-600 transition">How It Works</a>
+        <a href="#" class="hover:text-emerald-600 transition">For Providers</a>
+        <a href="#" class="hover:text-emerald-600 transition">About</a>
+      </nav>
+
+      <!-- Right Auth Actions -->
+      <div class="flex items-center gap-3">
+        <a href="#" class="hidden sm:inline-block text-xs font-extrabold text-slate-700 hover:text-emerald-600 px-4 py-2.5 rounded-xl transition">
+          Log In
+        </a>
+        <a href="#" class="bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-extrabold px-5 py-3 rounded-2xl shadow-md shadow-emerald-600/20 transition">
+          Get Started
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- HERO SECTION WITH LIGHT BACKGROUND IMAGE & OVERLAY -->
+  <section class="hero-bg-light py-20 sm:py-28 relative overflow-hidden border-b border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-8">
+      
+      <!-- Titles -->
+      <div class="space-y-3 max-w-2xl mx-auto">
+        <h1 class="text-4xl sm:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.1]">
+          Find. Book. Get It Done.
+        </h1>
+        <p class="text-base sm:text-lg font-bold text-emerald-700">
+          Local services, made simple.
+        </p>
+        <p class="text-sm font-semibold text-slate-600">
+          LIFELINK helps you find trusted local professionals quickly and safely, powered by AI.
+        </p>
+      </div>
+
+      <!-- MAIN SEARCH BAR WIDGET -->
+      <div class="bg-white p-3 rounded-3xl border border-slate-200 shadow-xl max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-12 gap-2 input-focus-effect transition">
+        
+        <!-- Search Input -->
+        <div class="sm:col-span-7 flex items-center gap-3 px-4 py-3.5 bg-slate-50 rounded-2xl border border-slate-200/80">
+          <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" placeholder="What do you need help with? e.g. plumber, cleaner, mechanic..." class="w-full bg-transparent text-sm font-bold text-slate-900 placeholder-slate-400 outline-none">
+        </div>
+
+        <!-- Location Dropdown -->
+        <div class="sm:col-span-3 flex items-center gap-2 px-4 py-3.5 bg-slate-50 rounded-2xl border border-slate-200/80">
+          <svg class="w-5 h-5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <select class="w-full bg-transparent text-xs font-extrabold text-slate-800 outline-none cursor-pointer">
+            <option selected>Benin City</option>
+            <option>Lagos (Victoria Island)</option>
+            <option>Lagos (Ikeja GRA)</option>
+            <option>Abuja (Central District)</option>
+          </select>
+        </div>
+
+        <!-- Search Button -->
+        <div class="sm:col-span-2">
+          <button onclick="handleSearch()" class="w-full h-full bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-extrabold py-3.5 px-4 rounded-2xl shadow-md shadow-emerald-600/25 transition text-xs flex items-center justify-center">
+            Search
+          </button>
+        </div>
+
+      </div>
+
+      <!-- CATEGORY PILLS BAR -->
+      <div class="flex items-center justify-center gap-2.5 flex-wrap pt-2 text-xs font-extrabold text-slate-700">
+        <a href="#" class="bg-white/90 hover:bg-emerald-50 hover:text-emerald-700 px-4 py-2 rounded-xl border border-slate-200 shadow-2xs transition flex items-center gap-1.5 backdrop-blur-xs">
+          <span>🛠️</span> Repair & Maintenance
+        </a>
+        <a href="#" class="bg-white/90 hover:bg-emerald-50 hover:text-emerald-700 px-4 py-2 rounded-xl border border-slate-200 shadow-2xs transition flex items-center gap-1.5 backdrop-blur-xs">
+          <span>🧹</span> Cleaning
+        </a>
+        <a href="#" class="bg-white/90 hover:bg-emerald-50 hover:text-emerald-700 px-4 py-2 rounded-xl border border-slate-200 shadow-2xs transition flex items-center gap-1.5 backdrop-blur-xs">
+          <span>✨</span> Beauty & Personal Care
+        </a>
+        <a href="#" class="bg-white/90 hover:bg-emerald-50 hover:text-emerald-700 px-4 py-2 rounded-xl border border-slate-200 shadow-2xs transition flex items-center gap-1.5 backdrop-blur-xs">
+          <span>🏠</span> Home Services
+        </a>
+        <a href="#" class="bg-white/90 hover:bg-emerald-50 hover:text-emerald-700 px-4 py-2 rounded-xl border border-slate-200 shadow-2xs transition flex items-center gap-1.5 backdrop-blur-xs">
+          <span>💼</span> Business & Creative
+        </a>
+        <a href="#" class="bg-white/90 hover:bg-emerald-50 hover:text-emerald-700 px-4 py-2 rounded-xl border border-slate-200 shadow-2xs transition flex items-center gap-1.5 backdrop-blur-xs">
+          More ∨
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4 KEY FEATURE CARDS SECTION -->
+  <section class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      
+      <!-- Feature 1 -->
+      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-3 hover:border-emerald-500 transition">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-lg shadow-2xs">
+          🛡️
+        </div>
+        <h3 class="text-base font-extrabold text-slate-900">Verified Professionals</h3>
+        <p class="text-xs font-semibold text-slate-500 leading-relaxed">
+          Verified professionals and background-checked service experts.
+        </p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-3 hover:border-emerald-500 transition">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-lg shadow-2xs">
+          💳
+        </div>
+        <h3 class="text-base font-extrabold text-slate-900">Secure Payments</h3>
+        <p class="text-xs font-semibold text-slate-500 leading-relaxed">
+          Secure escrow payments to ensure reliable completion and peace of mind.
+        </p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-3 hover:border-emerald-500 transition">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-lg shadow-2xs">📍</div>
+        <h3 class="text-base font-extrabold text-slate-900">Live Tracking</h3>
+        <p class="text-xs font-semibold text-slate-500 leading-relaxed">Follow your professional on the way and stay in touch from request to completion.</p>
+      </div>
+      <!-- Feature 4 -->
+      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-3 hover:border-emerald-500 transition">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-lg shadow-2xs">⭐</div>
+        <h3 class="text-base font-extrabold text-slate-900">Real Reviews</h3>
+        <p class="text-xs font-semibold text-slate-500 leading-relaxed">Choose with confidence using ratings and reviews from customers who booked before you.</p>
+      </div>
+    </div>
+  </section>
+  <!-- HOW IT WORKS -->
+  <section id="how" class="bg-white border-y border-slate-200 py-16">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      <div class="text-center space-y-2"><h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">How LIFELINK works</h2><p class="text-sm font-semibold text-slate-500">From request to done in four simple steps.</p></div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="text-center space-y-3"><div class="w-12 h-12 mx-auto rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-extrabold text-lg shadow-md shadow-emerald-600/20">1</div><h3 class="text-base font-extrabold text-slate-900">Describe the job</h3><p class="text-xs font-semibold text-slate-500 leading-relaxed max-w-[15rem] mx-auto">Tell us what you need, where, and how urgent it is.</p></div>
+        <div class="text-center space-y-3"><div class="w-12 h-12 mx-auto rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-extrabold text-lg shadow-md shadow-emerald-600/20">2</div><h3 class="text-base font-extrabold text-slate-900">Compare quotes</h3><p class="text-xs font-semibold text-slate-500 leading-relaxed max-w-[15rem] mx-auto">Verified professionals respond with prices and arrival times.</p></div>
+        <div class="text-center space-y-3"><div class="w-12 h-12 mx-auto rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-extrabold text-lg shadow-md shadow-emerald-600/20">3</div><h3 class="text-base font-extrabold text-slate-900">Book and pay securely</h3><p class="text-xs font-semibold text-slate-500 leading-relaxed max-w-[15rem] mx-auto">Pay through LIFELINK so funds are held until the work is done.</p></div>
+        <div class="text-center space-y-3"><div class="w-12 h-12 mx-auto rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-extrabold text-lg shadow-md shadow-emerald-600/20">4</div><h3 class="text-base font-extrabold text-slate-900">Get it done</h3><p class="text-xs font-semibold text-slate-500 leading-relaxed max-w-[15rem] mx-auto">Track your pro, then rate the work when you are happy.</p></div>
+      </div>
+    </div>
+  </section>
+  <!-- PROVIDER CTA -->
+  <section class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-14">
+    <div class="bg-slate-900 rounded-3xl p-8 sm:p-12 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="space-y-2 text-center sm:text-left"><h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Are you a professional?</h2><p class="text-sm font-semibold text-slate-300">Join LIFELINK, get verified and receive job requests near you.</p></div>
+      <a href="provider-onboarding.html" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm px-7 py-4 rounded-2xl shadow-md shrink-0">Become a Provider</a>
+    </div>
+  </section>
+  <!-- FOOTER -->
+  <footer class="mt-auto bg-white border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-bold text-slate-500">
+      <span class="font-extrabold text-slate-900">LIFELINK <span class="text-slate-400 font-semibold">© 2026 • Benin City, Nigeria</span></span>
+      <div class="flex items-center gap-5"><a href="trust-safety.html" class="hover:text-emerald-600">Trust &amp; Safety</a><a href="discovery.html" class="hover:text-emerald-600">Find Providers</a><a href="provider-onboarding.html" class="hover:text-emerald-600">For Providers</a><a href="mobile-home.html" class="hover:text-emerald-600">Mobile App</a></div>
+    </div>
+  </footer>
+<script src="lifelink.js"></script>
+</body>
+</html>

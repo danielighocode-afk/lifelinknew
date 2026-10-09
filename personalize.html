@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personalize Your Experience — LIFELINK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Leaflet CSS & JS for Interactive Map Preview -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            emerald: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              200: '#a7f3d0',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+            },
+            slate: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#0f172a',
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #F8FAFC;
+      color: #0F172A;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .input-focus-effect:focus-within {
+      border-color: #059669;
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.12);
+    }
+    #onboarding-map {
+      height: 220px;
+      width: 100%;
+      border-radius: 1rem;
+      z-index: 1;
+    }
+    .leaflet-container {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f1f5f9;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-50 antialiased selection:bg-emerald-100 selection:text-emerald-800" data-ll-page="personalize" data-ll-role="customer">
+
+  <!-- TOP HEADER -->
+  <header class="bg-white border-b border-slate-200/80 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <!-- LIFELINK Logo -->
+      <div class="flex items-center gap-3">
+        <img src="images/lifelink-logo.png" alt="LifeLink" class="h-10 w-auto object-contain">
+        <div>
+          <span class="text-[10px] font-bold text-slate-400 tracking-wider uppercase">Find. Book. Get It Done.</span>
+        </div>
+      </div>
+
+      <!-- Skip Option -->
+      <button onclick="completeOnboarding()" class="text-xs font-bold text-slate-400 hover:text-emerald-600 transition flex items-center gap-1">
+        <span>Skip for now</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN ONBOARDING CONTAINER -->
+  <main class="max-w-2xl mx-auto px-4 sm:px-6 py-8 sm:py-10 flex-grow w-full space-y-6">
+
+    <!-- PAGE TITLE & SUPPORTING TEXT -->
+    <div class="text-center space-y-2">
+      <div class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 text-xs font-extrabold px-3.5 py-1 rounded-full border border-emerald-200/80 mb-1">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        Personalized Recommendation Engine
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Let's personalize LIFELINK for you</h1>
+      <p class="text-xs sm:text-sm font-semibold text-slate-500 max-w-md mx-auto">Tell us a little about what you need so we can show you better recommendations.</p>
+    </div>
+
+    <!-- PROGRESS INDICATOR CARD -->
+    <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs">
+      <div class="grid grid-cols-3 gap-3 text-center">
+        
+        <!-- Step 1 Indicator -->
+        <div id="progress-step-1" class="flex flex-col items-center gap-1.5">
+          <div id="badge-1" class="w-8 h-8 rounded-full bg-emerald-600 text-white font-extrabold text-xs flex items-center justify-center shadow-sm shadow-emerald-600/30 transition">
+            1
+          </div>
+          <span id="label-1" class="text-[11px] font-extrabold text-emerald-700">Services</span>
+        </div>
+
+        <!-- Step 2 Indicator -->
+        <div id="progress-step-2" class="flex flex-col items-center gap-1.5">
+          <div id="badge-2" class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 font-extrabold text-xs flex items-center justify-center border border-slate-200 transition">
+            2
+          </div>
+          <span id="label-2" class="text-[11px] font-bold text-slate-400">Location</span>
+        </div>
+
+        <!-- Step 3 Indicator -->
+        <div id="progress-step-3" class="flex flex-col items-center gap-1.5">
+          <div id="badge-3" class="w-8 h-8 rounded-full bg-slate-100 text-slate-400 font-extrabold text-xs flex items-center justify-center border border-slate-200 transition">
+            3
+          </div>
+          <span id="label-3" class="text-[11px] font-bold text-slate-400">Preferences</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MAIN STEP CARDS CONTAINER -->
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm relative overflow-hidden">
+      
+      <!-- ==================== STEP 1: SERVICES ==================== -->
+      <section id="step-1-content" class="space-y-6">
+        <div class="border-b border-slate-100 pb-4">
+          <h2 class="text-lg font-extrabold text-slate-900">What services are you interested in?</h2>
+          <p class="text-xs font-semibold text-slate-500 mt-0.5">Select all that apply to help us tailor your provider suggestions.</p>
+        </div>
+
+        <!-- Categories Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          
+          <!-- Electrical -->
+          <button type="button" onclick="toggleServiceSelection(this)" class="service-card p-3.5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:border-emerald-500 hover:bg-emerald-50/40 transition text-left flex flex-col justify-between h-24 relative group cursor-pointer">
+            <div class="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 group-hover:text-emerald-600 transition shadow-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <span class="text-xs font-extrabold text-slate-900">Electrical</span>
+            <span class="check-icon absolute top-3 right-3 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] opacity-0 transition">✓</span>
+          </button>
+
+          <!-- Plumbing -->
+          <button type="button" onclick="toggleServiceSelection(this)" class="service-card p-3.5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:border-emerald-500 hover:bg-emerald-50/40 transition text-left flex flex-col justify-between h-24 relative group cursor-pointer">
+            <div class="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 group-hover:text-emerald-600 transition shadow-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+              </svg>
+            </div>
+            <span class="text-xs font-extrabold text-slate-900">Plumbing</span>
+            <span class="check-icon absolute top-3 right-3 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] opacity-0 transition">✓</span>
+          </button>
+
+          <!-- Cleaning -->
+          <button type="button" onclick="toggleServiceSelection(this)" class="service-card p-3.5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:border-emerald-500 hover:bg-emerald-50/40 transition text-left flex flex-col justify-between h-24 relative group cursor-pointer">
+            <div class="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 group-hover:text-emerald-600 transition shadow-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+              </svg>
+            </div>
+            <span class="text-xs font-extrabold text-slate-900">Cleaning</span>
+            <span class="check-icon absolute top-3 right-3 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] opacity-0 transition">✓</span>
+          </button>
+
+          <!-- AC & Refrigeration -->
+          <button type="button" onclick="toggleServiceSelection(this)" class="service-card p-3.5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:border-emerald-500 hover:bg-emerald-50/40 transition text-left flex flex-col justify-between h-24 relative group cursor-pointer">
+            <div class="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 group-hover:text-emerald-600 transition shadow-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+              </svg>
+            </div>
+            <span class="text-xs font-extrabold text-slate-900">AC & Refrigeration</span>
+            <span class="check-icon absolute top-3 right-3 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] opacity-0 transition">✓</span>
+          </button>
+
+          <!-- Mechanics -->
+          <button type="button" onclick="toggleServiceSelection(this)" class="service-card p-3.5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:border-emerald-500 hover:bg-emerald-50/40 transition text-left flex flex-col justify-between h-24 relative group cursor-pointer">
+            <div class="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 group-hover:text-emerald-600 transition shadow-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <span class="text-xs font-extrabold text-slate-900">Mechanics</span>
+            <span class="check-icon absolute top-3 right-3 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] opacity-0 transition">✓</span>
+          </button>
+
+          <!-- Beauty -->
+          <button type="button" onclick="toggleServiceSelection(this)" class="service-card p-3.5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:border-emerald-500 hover:bg-emerald-50/40 transition text-left flex flex-col justify-between h-24 relative group cursor-pointer">
+            <div class="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 group-hover:text-emerald-600 transition shadow-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 11-4.243-4.243 3 3 0 014.243 4.243z"/>
+              </svg>
+            </div>
+            <span class="text-xs font-extrabold text-slate-900">Beauty & Barber</span>
+            <span class="check-icon absolute top-3 right-3 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] opacity-0 transition">✓</span>
+          </button>
+
+          <!-- Tutoring -->
+          <button type="button" onclick="toggleServiceSelection(this)" class="service-card p-3.5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:border-emerald-500 hover:bg-emerald-50/40 transition text-left flex flex-col justify-between h-24 relative group cursor-pointer">
+            <div class="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 group-hover:text-emerald-600 transition shadow-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+              </svg>
+            </div>
+            <span class="text-xs font-extrabold text-slate-900">Tutoring</span>
+            <span class="check-icon absolute top-3 right-3 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] opacity-0 transition">✓</span>
+          </button>
+
+          <!-- Photography -->
+          <button type="button" onclick="toggleServiceSelection(this)" class="service-card p-3.5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:border-emerald-500 hover:bg-emerald-50/40 transition text-left flex flex-col justify-between h-24 relative group cursor-pointer">
+            <div class="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 group-hover:text-emerald-600 transition shadow-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <span class="text-xs font-extrabold text-slate-900">Photography</span>
+            <span class="check-icon absolute top-3 right-3 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] opacity-0 transition">✓</span>
+          </button>
+
+          <!-- Painting -->
+          <button type="button" onclick="toggleServiceSelection(this)" class="service-card p-3.5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:border-emerald-500 hover:bg-emerald-50/40 transition text-left flex flex-col justify-between h-24 relative group cursor-pointer">
+            <div class="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 group-hover:text-emerald-600 transition shadow-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+              </svg>
+            </div>
+            <span class="text-xs font-extrabold text-slate-900">Painting</span>
+            <span class="check-icon absolute top-3 right-3 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] opacity-0 transition">✓</span>
+          </button>
+
+          <!-- Design & Creative -->
+          <button type="button" onclick="toggleServiceSelection(this)" class="service-card p-3.5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:border-emerald-500 hover:bg-emerald-50/40 transition text-left flex flex-col justify-between h-24 relative group cursor-pointer">
+            <div class="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 group-hover:text-emerald-600 transition shadow-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+              </svg>
+            </div>
+            <span class="text-xs font-extrabold text-slate-900">Design & Creative</span>
+            <span class="check-icon absolute top-3 right-3 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] opacity-0 transition">✓</span>
+          </button>
+
+          <!-- Moving -->
+          <button type="button" onclick="toggleServiceSelection(this)" class="service-card p-3.5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:border-emerald-500 hover:bg-emerald-50/40 transition text-left flex flex-col justify-between h-24 relative group cursor-pointer">
+            <div class="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 group-hover:text-emerald-600 transition shadow-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20"/>
+              </svg>
+            </div>
+            <span class="text-xs font-extrabold text-slate-900">Moving & Logistics</span>
+            <span class="check-icon absolute top-3 right-3 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] opacity-0 transition">✓</span>
+          </button>
+
+          <!-- Other -->
+          <button type="button" onclick="toggleServiceSelection(this)" class="service-card p-3.5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:border-emerald-500 hover:bg-emerald-50/40 transition text-left flex flex-col justify-between h-24 relative group cursor-pointer">
+            <div class="w-8 h-8 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 group-hover:text-emerald-600 transition shadow-xs">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+              </svg>
+            </div>
+            <span class="text-xs font-extrabold text-slate-900">Other Services</span>
+            <span class="check-icon absolute top-3 right-3 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] opacity-0 transition">✓</span>
+          </button>
+
+        </div>
+      </section>
+
+
+      <!-- ==================== STEP 2: LOCATION ==================== -->
+      <section id="step-2-content" class="space-y-6 hidden">
+        <div class="border-b border-slate-100 pb-4">
+          <h2 class="text-lg font-extrabold text-slate-900">Where are you located?</h2>
+          <p class="text-xs font-semibold text-slate-500 mt-0.5">We'll show you verified professionals operating near your neighborhood.</p>
+        </div>
+
+        <div class="space-y-4">
+          
+          <!-- Location Search Field -->
+          <div class="space-y-1.5">
+            <label class="block text-xs font-extrabold text-slate-700 uppercase tracking-wider">Search Neighborhood or City</label>
+            <div class="input-focus-effect bg-slate-50 border border-slate-300 rounded-2xl p-1 transition flex items-center">
+              <div class="p-3 text-emerald-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+              </div>
+              <input type="text" id="locationSearchInput" value="GRA, Benin City, Edo State" class="w-full bg-transparent text-sm font-bold text-slate-900 placeholder-slate-400 outline-none pr-3 py-2">
+            </div>
+          </div>
+
+          <!-- Use My Current Location Button -->
+          <button type="button" onclick="useCurrentLocation()" class="w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-extrabold py-3 px-4 rounded-2xl border border-emerald-200 text-xs transition flex items-center justify-center gap-2">
+            <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0013 3.06V1h-2v2.06A8.994 8.994 0 003.06 11H1v2h2.06A8.994 8.994 0 0011 20.94V23h2v-2.06A8.994 8.994 0 0020.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>
+            </svg>
+            <span>Use my current GPS location</span>
+          </button>
+
+          <!-- Small Interactive Map Preview -->
+          <div class="space-y-1.5 pt-2">
+            <span class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider block">Location Map Preview</span>
+            <div id="onboarding-map" class="shadow-inner border border-slate-200"></div>
+          </div>
+
+        </div>
+      </section>
+
+
+      <!-- ==================== STEP 3: PREFERENCES ==================== -->
+      <section id="step-3-content" class="space-y-6 hidden">
+        <div class="border-b border-slate-100 pb-4">
+          <h2 class="text-lg font-extrabold text-slate-900">What matters most to you?</h2>
+          <p class="text-xs font-semibold text-slate-500 mt-0.5">Select your primary criteria when choosing service professionals.</p>
+        </div>
+
+        <!-- Preference Cards Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          
+          <!-- Best Rated -->
+          <button type="button" onclick="selectPreference(this)" class="pref-card p-5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:border-emerald-500 hover:bg-emerald-50/40 transition text-left flex items-start gap-4 relative group cursor-pointer">
+            <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-amber-500 shrink-0 shadow-xs">
+              ★
+            </div>
+            <div>
+              <h4 class="text-sm font-extrabold text-slate-900">Best Rated</h4>
+              <p class="text-xs text-slate-500 font-semibold mt-0.5">Prioritize top-reviewed specialists with 4.8+ star scores.</p>
+            </div>
+            <span class="pref-check absolute top-4 right-4 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] opacity-0 transition">✓</span>
+          </button>
+
+          <!-- Best Price -->
+          <button type="button" onclick="selectPreference(this)" class="pref-card p-5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:border-emerald-500 hover:bg-emerald-50/40 transition text-left flex items-start gap-4 relative group cursor-pointer">
+            <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-emerald-600 shrink-0 shadow-xs font-extrabold text-sm">
+              ₦
+            </div>
+            <div>
+              <h4 class="text-sm font-extrabold text-slate-900">Best Price</h4>
+              <p class="text-xs text-slate-500 font-semibold mt-0.5">Find competitive rates and transparent estimates for your budget.</p>
+            </div>
+            <span class="pref-check absolute top-4 right-4 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] opacity-0 transition">✓</span>
+          </button>
+
+          <!-- Closest -->
+          <button type="button" onclick="selectPreference(this)" class="pref-card p-5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:border-emerald-500 hover:bg-emerald-50/40 transition text-left flex items-start gap-4 relative group cursor-pointer">
+            <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 shrink-0 shadow-xs">
+              <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-sm font-extrabold text-slate-900">Closest Location</h4>
+              <p class="text-xs text-slate-500 font-semibold mt-0.5">Match with specialists operating right in your neighborhood.</p>
+            </div>
+            <span class="pref-check absolute top-4 right-4 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] opacity-0 transition">✓</span>
+          </button>
+
+          <!-- Fastest Response -->
+          <button type="button" onclick="selectPreference(this)" class="pref-card p-5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:border-emerald-500 hover:bg-emerald-50/40 transition text-left flex items-start gap-4 relative group cursor-pointer">
+            <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-700 shrink-0 shadow-xs">
+              <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-sm font-extrabold text-slate-900">Fastest Response</h4>
+              <p class="text-xs text-slate-500 font-semibold mt-0.5">Instant booking for urgent home or business fixes under 15 mins.</p>
+            </div>
+            <span class="pref-check absolute top-4 right-4 w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] opacity-0 transition">✓</span>
+          </button>
+
+        </div>
+      </section>
+
+      <!-- BOTTOM NAVIGATION CONTROLS -->
+      <div class="pt-6 border-t border-slate-100 flex items-center justify-between">
+        <button type="button" id="backBtn" onclick="previousStep()" class="text-slate-500 hover:text-slate-800 font-extrabold text-xs px-5 py-3 rounded-2xl hover:bg-slate-100 transition flex items-center gap-1.5 opacity-50 cursor-not-allowed" disabled>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+          </svg>
+          <span>Back</span>
+        </button>
+
+        <button type="button" id="continueBtn" onclick="nextStep()" class="bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-extrabold text-xs px-7 py-3.5 rounded-2xl shadow-md shadow-emerald-600/20 transition flex items-center gap-2">
+          <span id="nextBtnText">Continue</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- SUBTLE TRUST FOOTER -->
+    <div class="flex items-center justify-center gap-2 text-center text-[11px] font-bold text-slate-400">
+      <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M2.166 11.388a.75.75 0 011.096-.043l2.8 2.8a.75.75 0 001.06 0l8.75-8.75a.75.75 0 111.06 1.06l-8.75 8.75a2.25 2.25 0 01-3.182 0l-2.8-2.8a.75.75 0 01-.034-1.017z" clip-rule="evenodd"/>
+      </svg>
+      <span>Your preferences update your recommendations in real time</span>
+    </div>
+
+  </main>
+
+  <!-- JS LOGIC FOR STEPS & MAP -->
+  <script>
+    let currentStep = 1;
+    let mapInstance = null;
+
+    function toggleServiceSelection(card) {
+      card.classList.toggle('bg-emerald-50/80');
+      card.classList.toggle('border-emerald-600');
+      card.classList.toggle('ring-2');
+      card.classList.toggle('ring-emerald-500/20');
+      
+      const check = card.querySelector('.check-icon');
+      if (check.classList.contains('opacity-0')) {
+        check.classList.remove('opacity-0');
+        check.classList.add('opacity-100');
+      } else {
+        check.classList.remove('opacity-100');
+        check.classList.add('opacity-0');
+      }
+    }
+
+    function selectPreference(card) {
+      document.querySelectorAll('.pref-card').forEach(c => {
+        c.classList.remove('bg-emerald-50/80', 'border-emerald-600', 'ring-2', 'ring-emerald-500/20');
+        const check = c.querySelector('.pref-check');
+        check.classList.remove('opacity-100');
+        check.classList.add('opacity-0');
+      });
+
+      card.classList.add('bg-emerald-50/80', 'border-emerald-600', 'ring-2', 'ring-emerald-500/20');
+      const check = card.querySelector('.pref-check');
+      check.classList.remove('opacity-0');
+      check.classList.add('opacity-100');
+    }
+
+    function updateStepUI() {
+      // Hide all step contents
+      document.getElementById('step-1-content').classList.add('hidden');
+      document.getElementById('step-2-content').classList.add('hidden');
+      document.getElementById('step-3-content').classList.add('hidden');
+
+      // Update progress badges and labels
+      for (let i = 1; i <= 3; i++) {
+        const badge = document.getElementById('badge-' + i);
+        const label = document.getElementById('label-' + i);
+
+        if (i < currentStep) {
+          badge.className = 'w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-extrabold text-xs flex items-center justify-center border border-emerald-300';
+          badge.innerHTML = '✓';
+          label.className = 'text-[11px] font-extrabold text-emerald-700';
+        } else if (i === currentStep) {
+          badge.className = 'w-8 h-8 rounded-full bg-emerald-600 text-white font-extrabold text-xs flex items-center justify-center shadow-sm shadow-emerald-600/30';
+          badge.innerHTML = i;
+          label.className = 'text-[11px] font-extrabold text-emerald-700';
+        } else {
+          badge.className = 'w-8 h-8 rounded-full bg-slate-100 text-slate-400 font-extrabold text-xs flex items-center justify-center border border-slate-200';
+          badge.innerHTML = i;
+          label.className = 'text-[11px] font-bold text-slate-400';
+        }
+      }
+
+      // Show active step
+      document.getElementById(`step-${currentStep}-content`).classList.remove('hidden');
+
+      // Update Back Button
+      const backBtn = document.getElementById('backBtn');
+      if (currentStep === 1) {
+        backBtn.disabled = true;
+        backBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      } else {
+        backBtn.disabled = false;
+        backBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+
+      // Update Next Button Text
+      const nextBtnText = document.getElementById('nextBtnText');
+      if (currentStep === 3) {
+        nextBtnText.innerText = 'Complete Setup';
+      } else {
+        nextBtnText.innerText = 'Continue';
+      }
+
+      // Initialize Map on Step 2
+      if (currentStep === 2) {
+        if (!mapInstance) {
+          setTimeout(initOnboardingMap, 100);
+        } else {
+          setTimeout(() => mapInstance.invalidateSize(), 100);
+        }
+      }
+    }
+
+    function nextStep() {
+      if (currentStep < 3) {
+        currentStep++;
+        updateStepUI();
+      } else {
+        completeOnboarding();
+      }
+    }
+
+    function previousStep() {
+      if (currentStep > 1) {
+        currentStep--;
+        updateStepUI();
+      }
+    }
+
+    function initOnboardingMap() {
+      const beninCoords = [6.3350, 5.6037]; // GRA Benin City
+      mapInstance = L.map('onboarding-map', {
+        zoomControl: true,
+        scrollWheelZoom: false
+      }).setView(beninCoords, 14);
+
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap &copy; CARTO',
+        maxZoom: 19
+      }).addTo(mapInstance);
+
+      const customPin = L.divIcon({
+        className: 'custom-pin',
+        html: `<div style="background-color: #059669; width: 22px; height: 22px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.3);"></div>`,
+        iconSize: [22, 22],
+        iconAnchor: [11, 11]
+      });
+
+      L.marker(beninCoords, { icon: customPin }).addTo(mapInstance)
+        .bindPopup("<b style='font-size: 12px;'>GRA, Benin City</b><br>Primary Search Hub").openPopup();
+    }
+
+    function useCurrentLocation() {
+      document.getElementById('locationSearchInput').value = "GRA, Benin City (Current Location)";
+      alert('📍 Location updated to your current GPS position!');
+    }
+
+    function completeOnboarding() {
+      alert('🎉 Welcome to LIFELINK! Your personalized marketplace is ready.');
+    }
+  </script>
+<script src="lifelink.js"></script>
+</body>
+</html>

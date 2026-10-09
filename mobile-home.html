@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LIFELINK Mobile App - Customer Home Screen</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#ECFDF5',  // Subtle Emerald Tint
+                            100: '#D1FAE5',
+                            200: '#A7F3D0',  // Soft Green Border
+                            500: '#10B981',  // Primary Emerald Brand Color
+                            600: '#059669',  // Dark Emerald Hover
+                            700: '#047857',  // Active Emerald
+                        },
+                        charcoal: {
+                            900: '#0F172A',  // Primary Text
+                            700: '#334155',  // Secondary Text
+                            600: '#475569',
+                            500: '#64748B',  // Muted Label Text
+                            400: '#94A3B8',  // Disabled/Placeholder
+                        },
+                        subtle: {
+                            bg: '#F8FAFC',   // Light gray secondary background
+                            surface: '#F1F5F9',
+                        },
+                        borderLine: '#E2E8F0' // Soft Gray Border
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 12px -2px rgba(15, 23, 42, 0.05)',
+                        'card': '0 2px 8px -1px rgba(15, 23, 42, 0.04), 0 1px 4px -1px rgba(15, 23, 42, 0.02)',
+                        'floating': '0 12px 32px -4px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.04)',
+                        'bottom-nav': '0 -4px 16px rgba(15, 23, 42, 0.04)',
+                    },
+                    borderRadius: {
+                        'xl': '12px',
+                        '2xl': '16px',
+                        '3xl': '24px',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Font Plus Jakarta Sans & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom scrollbar hiding for crisp touch carousels */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F1F5F9;
+            color: #0F172A;
+            -webkit-font-smoothing: antialiased;
+        }
+        .app-frame {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-0 md:p-6 bg-slate-100" data-ll-page="mobile" data-ll-role="public">
+
+    <!-- Frame View Toggle Header for Desktop Evaluation -->
+    <div class="hidden md:flex items-center justify-between w-full max-w-md mb-4 bg-white px-4 py-2.5 rounded-xl border border-borderLine shadow-soft text-xs font-semibold text-charcoal-700">
+        <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+            <span>LIFELINK iOS Simulator</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <button onclick="toggleFrameView('mobile')" id="btnMobileView" class="px-3 py-1.5 rounded-lg bg-brand-500 text-white transition-all">Mobile Device</button>
+            <button onclick="toggleFrameView('full')" id="btnFullView" class="px-3 py-1.5 rounded-lg bg-subtle-surface text-charcoal-700 hover:bg-slate-200 transition-all">Full Screen</button>
+        </div>
+    </div>
+
+    <!-- MAIN APP VIEWPORT CONTAINER (Responsive iPhone 15 Pro Specs) -->
+    <div id="appContainer" class="app-frame w-full max-w-md bg-white min-h-screen md:min-h-[852px] md:max-h-[852px] md:rounded-[48px] md:border-[10px] md:border-slate-900 shadow-floating relative flex flex-col overflow-hidden">
+        
+        <!-- Smartphone Status Bar (Light Mode) -->
+        <div class="bg-white pt-3 px-7 pb-1 flex items-center justify-between text-xs font-bold text-charcoal-900 z-30 shrink-0 select-none">
+            <span id="liveClock">09:41</span>
+            <!-- iPhone Dynamic Island Placeholder on Desktop Device Frame -->
+            <div class="hidden md:block w-24 h-5 bg-slate-900 rounded-full mx-auto -mt-1"></div>
+            <div class="flex items-center gap-1.5 text-charcoal-900">
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.2 19.54 10.55 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"/></svg>
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+            </div>
+        </div>
+
+        <!-- APP TOP HEADER -->
+        <header class="bg-white px-5 pt-3 pb-3 border-b border-borderLine/60 sticky top-0 z-20 shrink-0">
+            <!-- Row 1: Logo, Location Selector, Notification Icon -->
+            <div class="flex items-center justify-between mb-3">
+                
+                <!-- LIFELINK Logo -->
+                <a href="#" class="flex items-center gap-2 group">
+                    <img src="images/lifelink-logo.png" alt="LifeLink" class="h-9 w-auto object-contain">
+                </a>
+
+                <!-- Location Switcher Pill -->
+                <button onclick="openLocationModal()" class="flex items-center gap-1.5 bg-subtle-bg hover:bg-subtle-surface px-3 py-1.5 rounded-full border border-borderLine text-xs font-semibold text-charcoal-900 transition-colors">
+                    <svg class="w-3.5 h-3.5 text-brand-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    </svg>
+                    <span id="activeLocationName" class="truncate max-w-[120px]">GRA, Benin City</span>
+                    <svg class="w-3 h-3 text-charcoal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+
+                <!-- Notification Bell -->
+                <button onclick="showNotificationAlert()" class="relative p-2 rounded-full hover:bg-subtle-bg text-charcoal-700 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                    </svg>
+                    <span class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-brand-500 rounded-full ring-2 ring-white"></span>
+                </button>
+            </div>
+
+            <!-- Row 2: User Greeting & Question -->
+            <div class="mt-2 space-y-0.5">
+                <p class="text-xs font-bold text-brand-600 tracking-wide uppercase">Good morning, Daniel 👋</p>
+                <h1 class="text-lg font-extrabold text-charcoal-900 tracking-tight">What do you need help with today?</h1>
+            </div>
+        </header>
+
+        <!-- SCROLLABLE APP BODY -->
+        <div class="flex-1 overflow-y-auto no-scrollbar space-y-5 pb-24 bg-white">
+            
+            <!-- 1. PROMINENT SEARCH BAR SECTION -->
+            <div class="px-5 pt-4">
+                <div class="relative flex items-center">
+                    <div class="absolute left-3.5 text-charcoal-400 pointer-events-none">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </div>
+                    <input type="text" id="appSearchInput" onkeyup="handleAppSearch()" placeholder="Search for electrician, cleaner, mechanic..." class="w-full bg-subtle-bg border border-borderLine focus:border-brand-500 focus:bg-white text-xs font-medium text-charcoal-900 placeholder-charcoal-400 rounded-xl pl-10 pr-10 py-3 shadow-card transition-all outline-none">
+                    
+                    <!-- Voice / Filter Icon Button -->
+                    <button onclick="clearOrFilterSearch()" id="searchActionBtn" class="absolute right-3 p-1 rounded-lg text-charcoal-500 hover:text-brand-500 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2. SERVICE CATEGORIES GRID -->
+            <div class="px-5 space-y-3">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xs font-extrabold uppercase tracking-wider text-charcoal-500">Service Categories</h2>
+                    <span id="selectedCategoryBadge" class="text-[11px] font-bold text-brand-600 bg-brand-50 px-2 py-0.5 rounded-full border border-brand-200">All Categories</span>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2.5">
+                    
+                    <!-- Category 1: Repair & Maintenance -->
+                    <button onclick="selectAppCategory('Repair')" id="cat-Repair" class="cat-btn bg-subtle-bg hover:bg-brand-50/50 border border-borderLine hover:border-brand-200 p-3 rounded-2xl flex flex-col items-center text-center gap-2 transition-all group">
+                        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg group-hover:scale-105 transition-transform shadow-card">
+                            🛠️
+                        </div>
+                        <span class="text-[11px] font-bold text-charcoal-900 leading-tight">Repair & Maint.</span>
+                    </button>
+
+                    <!-- Category 2: Cleaning Services -->
+                    <button onclick="selectAppCategory('Cleaning')" id="cat-Cleaning" class="cat-btn bg-subtle-bg hover:bg-brand-50/50 border border-borderLine hover:border-brand-200 p-3 rounded-2xl flex flex-col items-center text-center gap-2 transition-all group">
+                        <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center text-lg group-hover:scale-105 transition-transform shadow-card">
+                            🧹
+                        </div>
+                        <span class="text-[11px] font-bold text-charcoal-900 leading-tight">Cleaning Services</span>
+                    </button>
+
+                    <!-- Category 3: Beauty & Personal Care -->
+                    <button onclick="selectAppCategory('Beauty')" id="cat-Beauty" class="cat-btn bg-subtle-bg hover:bg-brand-50/50 border border-borderLine hover:border-brand-200 p-3 rounded-2xl flex flex-col items-center text-center gap-2 transition-all group">
+                        <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-lg group-hover:scale-105 transition-transform shadow-card">
+                            💇‍♀️
+                        </div>
+                        <span class="text-[11px] font-bold text-charcoal-900 leading-tight">Beauty & Care</span>
+                    </button>
+
+                    <!-- Category 4: Home Services -->
+                    <button onclick="selectAppCategory('Home')" id="cat-Home" class="cat-btn bg-subtle-bg hover:bg-brand-50/50 border border-borderLine hover:border-brand-200 p-3 rounded-2xl flex flex-col items-center text-center gap-2 transition-all group">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg group-hover:scale-105 transition-transform shadow-card">
+                            🏡
+                        </div>
+                        <span class="text-[11px] font-bold text-charcoal-900 leading-tight">Home Services</span>
+                    </button>
+
+                    <!-- Category 5: Business & Creative -->
+                    <button onclick="selectAppCategory('Business')" id="cat-Business" class="cat-btn bg-subtle-bg hover:bg-brand-50/50 border border-borderLine hover:border-brand-200 p-3 rounded-2xl flex flex-col items-center text-center gap-2 transition-all group">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg group-hover:scale-105 transition-transform shadow-card">
+                            📷
+                        </div>
+                        <span class="text-[11px] font-bold text-charcoal-900 leading-tight">Business & Creative</span>
+                    </button>
+
+                    <!-- Category 6: More -->
+                    <button onclick="selectAppCategory('All')" id="cat-All" class="cat-btn bg-subtle-bg hover:bg-brand-50/50 border border-borderLine hover:border-brand-200 p-3 rounded-2xl flex flex-col items-center text-center gap-2 transition-all group">
+                        <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center text-lg group-hover:scale-105 transition-transform shadow-card">
+                            ✨
+                        </div>
+                        <span class="text-[11px] font-bold text-charcoal-900 leading-tight">All Services</span>
+                    </button>
+
+                </div>
+            </div>
+
+            <!-- PROMOTIONAL ESCROW PROTECTION BANNER -->
+            <div class="px-5">
+                <div class="bg-gradient-to-r from-brand-500 to-brand-600 rounded-2xl p-4 text-white shadow-soft flex items-center justify-between gap-3">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-xs bg-white/20 font-bold px-2 py-0.5 rounded-full text-white">LIFELINK Escrow</span>
+                            <span class="text-[10px] text-brand-100 font-medium">100% Safe</span>
+                        </div>
+                        <h3 class="text-xs font-bold leading-tight">Payment released only after job satisfaction.</h3>
+                    </div>
+                    <div class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. NEARBY PROVIDERS SECTION -->
+            <div class="px-5 space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-sm font-extrabold text-charcoal-900 tracking-tight">Nearby Verified Providers</h2>
+                        <p class="text-[11px] text-charcoal-500 font-medium">Top professionals within your area in Benin City</p>
+                    </div>
+                    <button onclick="selectAppCategory('All')" class="text-xs font-extrabold text-brand-600 hover:text-brand-700">See All</button>
+                </div>
+
+                <!-- Provider Cards Dynamic Container -->
+                <div id="mobileProvidersList" class="space-y-3">
+                    <!-- Dynamic rendering via JavaScript -->
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 4. FIXED BOTTOM NAVIGATION BAR -->
+        <nav class="absolute bottom-0 left-0 right-0 bg-white border-t border-borderLine px-6 py-2 z-30 shadow-bottom-nav flex items-center justify-between">
+            
+            <!-- Nav 1: Home -->
+            <button onclick="switchTab('home')" id="tabHome" class="nav-tab flex flex-col items-center gap-1 text-brand-500 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+                <span class="text-[10px] font-bold">Home</span>
+            </button>
+
+            <!-- Nav 2: Map -->
+            <button onclick="switchTab('map')" id="tabMap" class="nav-tab flex flex-col items-center gap-1 text-charcoal-500 hover:text-brand-500 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+                </svg>
+                <span class="text-[10px] font-semibold">Map View</span>
+            </button>
+
+            <!-- Nav 3: Bookings -->
+            <button onclick="switchTab('bookings')" id="tabBookings" class="nav-tab relative flex flex-col items-center gap-1 text-charcoal-500 hover:text-brand-500 transition-colors">
+                <div class="relative">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <span class="absolute -top-1 -right-2 bg-brand-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">2</span>
+                </div>
+                <span class="text-[10px] font-semibold">Bookings</span>
+            </button>
+
+            <!-- Nav 4: Messages -->
+            <button onclick="switchTab('messages')" id="tabMessages" class="nav-tab relative flex flex-col items-center gap-1 text-charcoal-500 hover:text-brand-500 transition-colors">
+                <div class="relative">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                    </svg>
+                    <span class="absolute -top-1 -right-1.5 w-2 h-2 bg-brand-500 rounded-full"></span>
+                </div>
+                <span class="text-[10px] font-semibold">Messages</span>
+            </button>
+
+            <!-- Nav 5: Profile -->
+            <button onclick="switchTab('profile')" id="tabProfile" class="nav-tab flex flex-col items-center gap-1 text-charcoal-500 hover:text-brand-500 transition-colors">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100" alt="Daniel" class="w-5 h-5 rounded-full object-cover border border-brand-500">
+                <span class="text-[10px] font-semibold">Profile</span>
+            </button>
+
+        </nav>
+
+        <!-- LOCATION SELECTOR MODAL -->
+        <div id="locationModal" class="absolute inset-0 z-50 hidden bg-charcoal-900/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+            <div class="bg-white rounded-t-3xl sm:rounded-2xl border border-borderLine w-full p-5 shadow-floating space-y-4 animate-in slide-in-from-bottom duration-200">
+                <div class="flex items-center justify-between border-b border-borderLine pb-3">
+                    <div>
+                        <h3 class="text-sm font-extrabold text-charcoal-900">Select Benin City Neighborhood</h3>
+                        <p class="text-[11px] text-charcoal-500">Show verified providers nearest to your current location</p>
+                    </div>
+                    <button onclick="closeLocationModal()" class="p-1 rounded-full text-charcoal-400 hover:text-charcoal-900">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+
+                <div class="space-y-2">
+                    <button onclick="setLocation('GRA, Benin City')" class="w-full text-left p-3 rounded-xl border border-borderLine hover:border-brand-500 hover:bg-brand-50/30 text-xs font-bold text-charcoal-900 flex items-center justify-between">
+                        <span>📍 GRA (Government Reservation Area)</span>
+                        <span class="text-[10px] bg-brand-100 text-brand-700 px-2 py-0.5 rounded-full">Active</span>
+                    </button>
+                    <button onclick="setLocation('Uselu, Benin City')" class="w-full text-left p-3 rounded-xl border border-borderLine hover:border-brand-500 hover:bg-brand-50/30 text-xs font-semibold text-charcoal-800 flex items-center justify-between">
+                        <span>📍 Uselu & UNIBEN Axis</span>
+                    </button>
+                    <button onclick="setLocation('Airport Road, Benin City')" class="w-full text-left p-3 rounded-xl border border-borderLine hover:border-brand-500 hover:bg-brand-50/30 text-xs font-semibold text-charcoal-800 flex items-center justify-between">
+                        <span>📍 Airport Road & Ugbor</span>
+                    </button>
+                    <button onclick="setLocation('Sapele Road, Benin City')" class="w-full text-left p-3 rounded-xl border border-borderLine hover:border-brand-500 hover:bg-brand-50/30 text-xs font-semibold text-charcoal-800 flex items-center justify-between">
+                        <span>📍 Sapele Road & Limit</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUICK BOOKING MODAL -->
+        <div id="quickBookingModal" class="absolute inset-0 z-50 hidden bg-charcoal-900/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+            <div class="bg-white rounded-t-3xl sm:rounded-2xl border border-borderLine w-full p-5 shadow-floating space-y-4 animate-in slide-in-from-bottom duration-200">
+                
+                <div class="flex items-center justify-between border-b border-borderLine pb-3">
+                    <div class="flex items-center gap-3">
+                        <img id="modalProImg" src="" class="w-10 h-10 rounded-xl object-cover border border-borderLine">
+                        <div>
+                            <h3 id="modalProName" class="text-sm font-extrabold text-charcoal-900">Book Service</h3>
+                            <p id="modalProRole" class="text-[11px] font-semibold text-brand-600">Professional</p>
+                        </div>
+                    </div>
+                    <button onclick="closeBookingModal()" class="p-1 rounded-full text-charcoal-400 hover:text-charcoal-900">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+
+                <!-- Booking Options -->
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-[11px] font-bold text-charcoal-800 mb-1">Select Arrival Time Slot</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button class="p-2.5 rounded-xl border border-brand-500 bg-brand-50 text-brand-700 text-xs font-bold text-center">
+                                ⚡ Immediate Callout (within 45 mins)
+                            </button>
+                            <button class="p-2.5 rounded-xl border border-borderLine bg-subtle-bg text-charcoal-700 text-xs font-medium text-center">
+                                📅 Schedule for Later
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-charcoal-800 mb-1">Service Notes / Issue Description</label>
+                        <textarea rows="2" placeholder="e.g. Please bring extra copper wiring and diagnostic tool..." class="w-full bg-subtle-bg border border-borderLine rounded-xl p-2.5 text-xs text-charcoal-900 focus:outline-none focus:border-brand-500"></textarea>
+                    </div>
+
+                    <!-- Escrow Protection Summary -->
+                    <div class="bg-subtle-bg p-3 rounded-xl border border-borderLine space-y-1.5">
+                        <div class="flex justify-between text-xs text-charcoal-600">
+                            <span>Diagnostic & Callout Fee</span>
+                            <span id="modalProPrice" class="font-bold text-charcoal-900">₦7,500</span>
+                        </div>
+                        <div class="flex justify-between text-xs text-charcoal-600">
+                            <span>LIFELINK Escrow Guarantee</span>
+                            <span class="font-bold text-brand-600">Included (Free)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <button onclick="confirmMobileBooking()" class="w-full bg-brand-500 hover:bg-brand-600 active:bg-brand-700 text-white font-bold text-xs py-3.5 rounded-xl shadow-soft transition-colors">
+                    Confirm & Hold Funds in Escrow
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Verified Nigerian Provider Dataset
+        const mobileProviders = [
+            {
+                id: 1,
+                name: "Engr. Osas Igbinovia",
+                profession: "Master Electrician",
+                category: "Repair",
+                rating: 4.9,
+                reviews: 142,
+                jobs: 142,
+                distance: "1.2 km away",
+                availability: "Available Now",
+                trustScore: "98%",
+                price: "₦7,500",
+                verified: true,
+                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300"
+            },
+            {
+                id: 2,
+                name: "Blessing Nwachukwu",
+                profession: "Beauty & Makeup Artist",
+                category: "Beauty",
+                rating: 5.0,
+                reviews: 98,
+                jobs: 98,
+                distance: "2.4 km away",
+                availability: "Available Today",
+                trustScore: "99%",
+                price: "₦15,000",
+                verified: true,
+                image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300"
+            },
+            {
+                id: 3,
+                name: "Emeka Okafor",
+                profession: "Auto Mechanic & Diagnostics",
+                category: "Repair",
+                rating: 4.8,
+                reviews: 215,
+                jobs: 215,
+                distance: "3.1 km away",
+                availability: "Available Now",
+                trustScore: "96%",
+                price: "₦10,000",
+                verified: true,
+                image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300"
+            },
+            {
+                id: 4,
+                name: "Aisha Bello",
+                profession: "Deep Home Cleaning Specialist",
+                category: "Cleaning",
+                rating: 4.9,
+                reviews: 87,
+                jobs: 87,
+                distance: "1.8 km away",
+                availability: "Available Tomorrow",
+                trustScore: "97%",
+                price: "₦12,000",
+                verified: true,
+                image: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&q=80&w=300"
+            },
+            {
+                id: 5,
+                name: "Tunde Bakare",
+                profession: "AC & Refrigeration Technician",
+                category: "Home",
+                rating: 4.9,
+                reviews: 176,
+                jobs: 176,
+                distance: "2.0 km away",
+                availability: "Available Now",
+                trustScore: "98%",
+                price: "₦8,500",
+                verified: true,
+                image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=300"
+            }
+        ];
+
+        let selectedCategory = 'All';
+
+        // Render Providers to Mobile Viewport
+        function renderMobileProviders(data) {
+            const container = document.getElementById('mobileProvidersList');
+            container.innerHTML = '';
+
+            if (data.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 bg-subtle-bg rounded-2xl border border-borderLine p-4">
+                        <p class="text-xs font-semibold text-charcoal-600">No matching providers found nearby.</p>
+                        <button onclick="selectAppCategory('All')" class="mt-2 text-xs font-bold text-brand-600 underline">Reset Search</button>
+                    </div>
+                `;
+                return;
+            }
+
+            data.forEach(pro => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl border border-borderLine p-3.5 shadow-card hover:shadow-soft transition-all space-y-3";
+                
+                const isNow = pro.availability === "Available Now";
+
+                card.innerHTML = `
+                    <div class="flex items-start gap-3">
+                        <!-- Provider Image + Verified Badge -->
+                        <div class="relative shrink-0">
+                            <img src="${pro.image}" alt="${pro.name}" class="w-14 h-14 rounded-xl object-cover border border-borderLine">
+                            <span class="absolute -bottom-1 -right-1 bg-brand-500 text-white rounded-full p-0.5 shadow-sm" title="LIFELINK Verified">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/>
+                                </svg>
+                            </span>
+                        </div>
+
+                        <!-- Info Column -->
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-xs font-extrabold text-charcoal-900 truncate">${pro.name}</h3>
+                                <span class="text-[10px] font-bold text-brand-700 bg-brand-50 px-1.5 py-0.5 rounded border border-brand-200">
+                                    ${pro.trustScore}
+                                </span>
+                            </div>
+
+                            <p class="text-[11px] font-semibold text-charcoal-600 truncate mt-0.5">${pro.profession}</p>
+
+                            <!-- Rating and Distance Row -->
+                            <div class="flex items-center gap-2 mt-1.5 text-[10px] text-charcoal-500 font-medium">
+                                <span class="text-amber-500 font-bold flex items-center gap-0.5">
+                                    ★ ${pro.rating} <span class="text-charcoal-400">(${pro.jobs})</span>
+                                </span>
+                                <span>•</span>
+                                <span>${pro.distance}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Tags & CTA Button -->
+                    <div class="flex items-center justify-between pt-2 border-t border-borderLine/60">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full ${isNow ? 'bg-brand-500 animate-pulse' : 'bg-slate-300'}"></span>
+                            <span class="text-[10px] font-bold ${isNow ? 'text-brand-700' : 'text-charcoal-500'}">${pro.availability}</span>
+                        </div>
+
+                        <button onclick="openBookingModal('${pro.name}', '${pro.profession}', '${pro.price}', '${pro.image}')" class="bg-brand-500 hover:bg-brand-600 active:bg-brand-700 text-white font-bold text-xs px-3.5 py-1.5 rounded-lg shadow-soft transition-all">
+                            Book Now
+                        </button>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        // Category Filter Function
+        function selectAppCategory(category) {
+            selectedCategory = category;
+            
+            // Update UI Button states
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('border-brand-500', 'bg-brand-50/50');
+                btn.classList.add('border-borderLine', 'bg-subtle-bg');
+            });
+
+            const selectedBtn = document.getElementById(`cat-${category}`);
+            if (selectedBtn) {
+                selectedBtn.classList.remove('border-borderLine', 'bg-subtle-bg');
+                selectedBtn.classList.add('border-brand-500', 'bg-brand-50/50');
+            }
+
+            document.getElementById('selectedCategoryBadge').innerText = category === 'All' ? 'All Categories' : category;
+
+            if (category === 'All') {
+                renderMobileProviders(mobileProviders);
+            } else {
+                const filtered = mobileProviders.filter(p => p.category === category);
+                renderMobileProviders(filtered);
+            }
+        }
+
+        // Live Search Input Handler
+        function handleAppSearch() {
+            const query = document.getElementById('appSearchInput').value.toLowerCase().trim();
+            if (!query) {
+                renderMobileProviders(mobileProviders);
+                return;
+            }
+
+            const results = mobileProviders.filter(p => 
+                p.name.toLowerCase().includes(query) ||
+                p.profession.toLowerCase().includes(query) ||
+                p.category.toLowerCase().includes(query)
+            );
+
+            renderMobileProviders(results);
+        }
+
+        function clearOrFilterSearch() {
+            document.getElementById('appSearchInput').value = '';
+            renderMobileProviders(mobileProviders);
+        }
+
+        // Location Modal Toggle
+        function openLocationModal() {
+            document.getElementById('locationModal').classList.remove('hidden');
+        }
+
+        function closeLocationModal() {
+            document.getElementById('locationModal').classList.add('hidden');
+        }
+
+        function setLocation(locName) {
+            document.getElementById('activeLocationName').innerText = locName;
+            closeLocationModal();
+        }
+
+        // Booking Modal Toggle
+        function openBookingModal(name, role, price, img) {
+            document.getElementById('modalProName').innerText = name;
+            document.getElementById('modalProRole').innerText = role;
+            document.getElementById('modalProPrice').innerText = price;
+            document.getElementById('modalProImg').src = img;
+            document.getElementById('quickBookingModal').classList.remove('hidden');
+        }
+
+        function closeBookingModal() {
+            document.getElementById('quickBookingModal').classList.add('hidden');
+        }
+
+        function confirmMobileBooking() {
+            alert('✅ Request Submitted! The provider has been notified via the LIFELINK network.');
+            closeBookingModal();
+        }
+
+        function showNotificationAlert() {
+            alert('🔔 You have 1 active booking update from Engr. Osas.');
+        }
+
+        // Bottom Tab Switcher
+        function switchTab(tabName) {
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('text-brand-500');
+                tab.classList.add('text-charcoal-500');
+            });
+
+            const active = document.getElementById(`tab${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`);
+            if (active) {
+                active.classList.remove('text-charcoal-500');
+                active.classList.add('text-brand-500');
+            }
+        }
+
+        // Desktop Evaluation Toggle: Full view vs Device shell
+        function toggleFrameView(mode) {
+            const frame = document.getElementById('appContainer');
+            const btnMobile = document.getElementById('btnMobileView');
+            const btnFull = document.getElementById('btnFullView');
+
+            if (mode === 'full') {
+                frame.classList.remove('max-w-md', 'md:min-h-[852px]', 'md:max-h-[852px]', 'md:rounded-[48px]', 'md:border-[10px]');
+                frame.classList.add('max-w-xl', 'rounded-2xl', 'border');
+                btnFull.classList.replace('bg-subtle-surface', 'bg-brand-500');
+                btnFull.classList.add('text-white');
+                btnMobile.classList.replace('bg-brand-500', 'bg-subtle-surface');
+                btnMobile.classList.remove('text-white');
+            } else {
+                frame.classList.add('max-w-md', 'md:min-h-[852px]', 'md:max-h-[852px]', 'md:rounded-[48px]', 'md:border-[10px]');
+                frame.classList.remove('max-w-xl');
+                btnMobile.classList.replace('bg-subtle-surface', 'bg-brand-500');
+                btnMobile.classList.add('text-white');
+                btnFull.classList.replace('bg-brand-500', 'bg-subtle-surface');
+                btnFull.classList.remove('text-white');
+            }
+        }
+
+        // Live Clock Tick
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const clockEl = document.getElementById('liveClock');
+            if(clockEl) clockEl.innerText = `${hours}:${minutes}`;
+        }
+
+        // Initial Load Configuration
+        window.onload = function() {
+            renderMobileProviders(mobileProviders);
+            setInterval(updateClock, 1000);
+            updateClock();
+        };
+    </script>
+<script src="lifelink.js"></script>
+</body>
+</html>

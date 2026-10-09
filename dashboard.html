@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Dashboard - LIFELINK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            emerald: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+            },
+            charcoal: {
+              800: '#1e293b',
+              900: '#0f172a',
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #F8FAFC;
+      color: #0F172A;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .nav-item-active {
+      background-color: #ECFDF5;
+      color: #047857;
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex bg-slate-50 antialiased selection:bg-emerald-100 selection:text-emerald-800" data-ll-page="dashboard" data-ll-role="customer">
+
+  <!-- LEFT SIDEBAR -->
+  <aside class="w-64 bg-white border-r border-slate-200/80 min-h-screen flex flex-col justify-between p-6 sticky top-0 h-screen shrink-0 z-20">
+    <div class="space-y-8">
+      
+      <!-- LOGO -->
+      <div class="flex items-center gap-3 px-2">
+        <img src="images/lifelink-logo.png" alt="LifeLink" class="h-12 w-auto object-contain">
+        <div>
+          <span class="text-[10px] font-bold text-slate-400 tracking-wider uppercase">Customer Hub</span>
+        </div>
+      </div>
+
+      <!-- NAVIGATION MENU -->
+      <nav class="space-y-1.5">
+        <a href="#" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-bold nav-item-active transition">
+          <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+          </svg>
+          Dashboard
+        </a>
+
+        <a href="#" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-slate-600 hover:text-emerald-700 hover:bg-slate-50 transition">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+          My Bookings
+        </a>
+
+        <a href="#" class="flex items-center justify-between px-3.5 py-3 rounded-2xl text-sm font-semibold text-slate-600 hover:text-emerald-700 hover:bg-slate-50 transition">
+          <div class="flex items-center gap-3">
+            <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+            Messages
+          </div>
+          <span class="bg-emerald-600 text-white text-[11px] font-extrabold px-2 py-0.5 rounded-full">2</span>
+        </a>
+
+        <a href="#" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-slate-600 hover:text-emerald-700 hover:bg-slate-50 transition">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+          </svg>
+          Wallet
+        </a>
+
+        <a href="#" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-slate-600 hover:text-emerald-700 hover:bg-slate-50 transition">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+          </svg>
+          Reviews
+        </a>
+
+        <a href="#" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-slate-600 hover:text-emerald-700 hover:bg-slate-50 transition">
+          <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          Settings
+        </a>
+      </nav>
+    </div>
+
+    <!-- PROFILE PILL -->
+    <div class="pt-6 border-t border-slate-100 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120" alt="Daniel" class="w-10 h-10 rounded-2xl object-cover border-2 border-slate-100 shadow-xs">
+        <div>
+          <h4 class="text-sm font-extrabold text-slate-900 leading-tight">Daniel O.</h4>
+          <span class="text-xs font-semibold text-slate-400">GRA, Benin City</span>
+        </div>
+      </div>
+      <button class="p-2 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+        </svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT AREA -->
+  <div class="flex-grow min-w-0 flex flex-col">
+
+    <!-- TOP BAR -->
+    <header class="bg-white border-b border-slate-200/80 px-8 py-4 sticky top-0 z-10 flex items-center justify-between">
+      <!-- Search Bar -->
+      <div class="relative max-w-md w-full">
+        <input type="text" placeholder="Search services, active orders, or providers..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl py-2.5 pl-10 pr-4 text-xs font-semibold text-slate-800 placeholder-slate-400 focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none transition">
+        <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="flex items-center gap-4">
+        <button class="p-2.5 text-slate-500 hover:text-emerald-600 bg-slate-50 hover:bg-emerald-50 rounded-2xl border border-slate-200 transition relative">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+          </svg>
+          <span class="w-2 h-2 rounded-full bg-emerald-500 absolute top-2 right-2 ring-2 ring-white"></span>
+        </button>
+
+        <div class="h-8 w-px bg-slate-200"></div>
+
+        <button class="bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-extrabold px-5 py-2.5 rounded-2xl shadow-sm shadow-emerald-600/20 text-xs transition flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
+          </svg>
+          <span>Book New Service</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- DASHBOARD CONTENT CANVAS -->
+    <main class="p-8 space-y-8 max-w-7xl w-full mx-auto">
+      
+      <!-- GREETING -->
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Good morning, Daniel</h1>
+          <p class="text-xs sm:text-sm font-semibold text-slate-500 mt-1">Here is an overview of your active bookings and home services today.</p>
+        </div>
+        <div class="hidden sm:flex items-center gap-2 bg-white px-4 py-2 rounded-2xl border border-slate-200 shadow-xs text-xs font-extrabold text-slate-700">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>LIFELINK Escrow Protected</span>
+        </div>
+      </div>
+
+      <!-- THREE STATISTICS CARDS -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Stat Card 1 -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs flex items-center justify-between relative overflow-hidden group hover:border-emerald-300 transition">
+          <div class="space-y-1">
+            <span class="text-xs font-extrabold text-slate-400 uppercase tracking-wider block">Active Bookings</span>
+            <span class="text-3xl font-extrabold text-slate-900 block tracking-tight">2</span>
+            <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 mt-1">
+              1 En Route Now
+            </span>
+          </div>
+          <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Stat Card 2 -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs flex items-center justify-between relative overflow-hidden group hover:border-emerald-300 transition">
+          <div class="space-y-1">
+            <span class="text-xs font-extrabold text-slate-400 uppercase tracking-wider block">Completed Services</span>
+            <span class="text-3xl font-extrabold text-slate-900 block tracking-tight">18</span>
+            <span class="inline-flex items-center gap-1 text-[11px] font-bold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full mt-1">
+              100% Satisfaction Rate
+            </span>
+          </div>
+          <div class="w-14 h-14 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center shrink-0 border border-slate-200">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Stat Card 3 -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs flex items-center justify-between relative overflow-hidden group hover:border-emerald-300 transition">
+          <div class="space-y-1">
+            <span class="text-xs font-extrabold text-slate-400 uppercase tracking-wider block">Total Spent</span>
+            <span class="text-3xl font-extrabold text-emerald-600 block tracking-tight">₦245,000</span>
+            <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 mt-1">
+              Escrow Secured
+            </span>
+          </div>
+          <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+            </svg>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TWO COLUMN MAIN LAYOUT -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- LEFT WIDE COLUMN (2 COLS) -->
+        <div class="lg:col-span-2 space-y-8">
+          
+          <!-- UPCOMING BOOKINGS SECTION -->
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-extrabold text-slate-900 tracking-tight">Upcoming Services</h2>
+              <a href="#" class="text-xs font-extrabold text-emerald-600 hover:text-emerald-700 transition">View All Bookings &rarr;</a>
+            </div>
+
+            <div class="space-y-4">
+              
+              <!-- Booking Card 1 (Active / On the Way) -->
+              <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs hover:border-emerald-300 transition space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+                  <div class="flex items-center gap-4">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200" alt="Chuks Electrical" class="w-12 h-12 rounded-2xl object-cover border border-slate-100">
+                    <div>
+                      <h3 class="font-extrabold text-slate-900 text-base">Chuks Electrical</h3>
+                      <p class="text-xs font-semibold text-emerald-600">Electrician • Fault Finding & Repairs</p>
+                    </div>
+                  </div>
+                  <div>
+                    <span class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 text-xs font-extrabold px-3 py-1 rounded-full border border-emerald-200 shadow-xs">
+                      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                      On the way (12 min)
+                    </span>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs font-semibold text-slate-600 pt-1">
+                  <div>
+                    <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider">Date & Time</span>
+                    <span class="text-slate-900 font-extrabold text-xs sm:text-sm mt-0.5 block">Today, 02:00 PM</span>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider">Location</span>
+                    <span class="text-slate-900 font-extrabold text-xs sm:text-sm mt-0.5 block truncate">GRA, Benin City</span>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider">Estimated Price</span>
+                    <span class="text-emerald-600 font-extrabold text-xs sm:text-sm mt-0.5 block">₦12,500</span>
+                  </div>
+                </div>
+
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-3">
+                  <button class="bg-white hover:bg-slate-50 text-slate-700 font-extrabold text-xs px-4 py-2.5 rounded-xl border border-slate-200 transition">
+                    Contact Provider
+                  </button>
+                  <button class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-xs transition">
+                    View Live Tracking
+                  </button>
+                </div>
+              </div>
+
+              <!-- Booking Card 2 (Scheduled) -->
+              <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs hover:border-emerald-300 transition space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+                  <div class="flex items-center gap-4">
+                    <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=200" alt="SafePlumb Repairs" class="w-12 h-12 rounded-2xl object-cover border border-slate-100">
+                    <div>
+                      <h3 class="font-extrabold text-slate-900 text-base">SafePlumb Repairs</h3>
+                      <p class="text-xs font-semibold text-emerald-600">Plumber • Bathroom Pipe Leakage</p>
+                    </div>
+                  </div>
+                  <div>
+                    <span class="inline-flex items-center gap-1.5 bg-slate-100 text-slate-700 text-xs font-extrabold px-3 py-1 rounded-full border border-slate-200">
+                      Confirmed
+                    </span>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs font-semibold text-slate-600 pt-1">
+                  <div>
+                    <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider">Date & Time</span>
+                    <span class="text-slate-900 font-extrabold text-xs sm:text-sm mt-0.5 block">Oct 12, 10:00 AM</span>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider">Location</span>
+                    <span class="text-slate-900 font-extrabold text-xs sm:text-sm mt-0.5 block truncate">GRA, Benin City</span>
+                  </div>
+                  <div>
+                    <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider">Estimated Price</span>
+                    <span class="text-emerald-600 font-extrabold text-xs sm:text-sm mt-0.5 block">₦18,000</span>
+                  </div>
+                </div>
+
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-end">
+                  <button class="bg-slate-50 hover:bg-slate-100 text-slate-800 font-extrabold text-xs px-5 py-2.5 rounded-xl border border-slate-200 transition">
+                    View Details
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- RECOMMENDED FOR YOU SECTION -->
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-lg font-extrabold text-slate-900 tracking-tight">Recommended for you</h2>
+                <p class="text-xs text-slate-500">Top-rated professionals matched with your recent requests</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              
+              <!-- Recommendation 1 -->
+              <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs hover:border-emerald-500 transition space-y-3 flex flex-col justify-between">
+                <div class="space-y-3">
+                  <div class="flex items-center gap-3">
+                    <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=200" class="w-12 h-12 rounded-2xl object-cover border border-slate-100">
+                    <div>
+                      <h4 class="font-extrabold text-slate-900 text-sm">Benin Cool AC Services</h4>
+                      <p class="text-xs font-semibold text-emerald-600">Air Conditioner & Cooling</p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center gap-3 text-xs font-bold text-slate-600">
+                    <span class="text-amber-500">★ 4.9</span>
+                    <span class="text-slate-300">•</span>
+                    <span>Trust Score: <strong class="text-emerald-700">96/100</strong></span>
+                  </div>
+                </div>
+
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <span class="text-xs font-extrabold text-slate-900">1.5 km away</span>
+                  <button class="text-xs font-extrabold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-3.5 py-2 rounded-xl transition">
+                    Book Service
+                  </button>
+                </div>
+              </div>
+
+              <!-- Recommendation 2 -->
+              <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs hover:border-emerald-500 transition space-y-3 flex flex-col justify-between">
+                <div class="space-y-3">
+                  <div class="flex items-center gap-3">
+                    <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&q=80&w=200" class="w-12 h-12 rounded-2xl object-cover border border-slate-100">
+                    <div>
+                      <h4 class="font-extrabold text-slate-900 text-sm">Premier Janitorial Services</h4>
+                      <p class="text-xs font-semibold text-emerald-600">Deep Cleaning & Sanitization</p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center gap-3 text-xs font-bold text-slate-600">
+                    <span class="text-amber-500">★ 4.8</span>
+                    <span class="text-slate-300">•</span>
+                    <span>Trust Score: <strong class="text-emerald-700">92/100</strong></span>
+                  </div>
+                </div>
+
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <span class="text-xs font-extrabold text-slate-900">2.1 km away</span>
+                  <button class="text-xs font-extrabold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-3.5 py-2 rounded-xl transition">
+                    Book Service
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT SIDEBAR COLUMN (1 COL) -->
+        <div class="space-y-8">
+          
+          <!-- RECENT ACTIVITY TIMELINE CARD -->
+          <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-xs space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+              <h2 class="text-base font-extrabold text-slate-900 tracking-tight">Recent Activity</h2>
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Live Updates</span>
+            </div>
+
+            <!-- TIMELINE ITEMS -->
+            <div class="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+              
+              <!-- Event 1: Review submitted -->
+              <div class="relative">
+                <div class="absolute -left-6 top-0.5 w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 border-2 border-white flex items-center justify-center text-[10px] font-bold shadow-xs">
+                  ★
+                </div>
+                <div>
+                  <p class="text-xs font-extrabold text-slate-900">Review submitted</p>
+                  <p class="text-xs text-slate-500 mt-0.5">Rated Chuks Electrical 5 stars for socket repair work.</p>
+                  <span class="text-[10px] font-bold text-slate-400 mt-1 block">2 hours ago</span>
+                </div>
+              </div>
+
+              <!-- Event 2: Payment completed -->
+              <div class="relative">
+                <div class="absolute -left-6 top-0.5 w-5 h-5 rounded-full bg-emerald-600 text-white border-2 border-white flex items-center justify-center text-[10px] font-bold shadow-xs">
+                  ✓
+                </div>
+                <div>
+                  <p class="text-xs font-extrabold text-slate-900">Payment completed</p>
+                  <p class="text-xs text-slate-500 mt-0.5">₦12,500 released from Escrow to provider.</p>
+                  <span class="text-[10px] font-bold text-slate-400 mt-1 block">3 hours ago</span>
+                </div>
+              </div>
+
+              <!-- Event 3: Service completed -->
+              <div class="relative">
+                <div class="absolute -left-6 top-0.5 w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 border-2 border-white flex items-center justify-center text-[10px] font-bold shadow-xs">
+                  ✓
+                </div>
+                <div>
+                  <p class="text-xs font-extrabold text-slate-900">Service completed</p>
+                  <p class="text-xs text-slate-500 mt-0.5">Chuks Electrical marked order #LL-89402 as finished.</p>
+                  <span class="text-[10px] font-bold text-slate-400 mt-1 block">3 hours ago</span>
+                </div>
+              </div>
+
+              <!-- Event 4: Provider accepted -->
+              <div class="relative">
+                <div class="absolute -left-6 top-0.5 w-5 h-5 rounded-full bg-slate-100 text-slate-600 border-2 border-white flex items-center justify-center text-[10px] font-bold shadow-xs">
+                  •
+                </div>
+                <div>
+                  <p class="text-xs font-extrabold text-slate-900">Provider accepted</p>
+                  <p class="text-xs text-slate-500 mt-0.5">SafePlumb Repairs confirmed appointment for Oct 12.</p>
+                  <span class="text-[10px] font-bold text-slate-400 mt-1 block">5 hours ago</span>
+                </div>
+              </div>
+
+              <!-- Event 5: Booking created -->
+              <div class="relative">
+                <div class="absolute -left-6 top-0.5 w-5 h-5 rounded-full bg-slate-100 text-slate-600 border-2 border-white flex items-center justify-center text-[10px] font-bold shadow-xs">
+                  +
+                </div>
+                <div>
+                  <p class="text-xs font-extrabold text-slate-900">Booking created</p>
+                  <p class="text-xs text-slate-500 mt-0.5">New plumbing service request submitted.</p>
+                  <span class="text-[10px] font-bold text-slate-400 mt-1 block">6 hours ago</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- TRUST BANNER -->
+          <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 text-white rounded-3xl p-6 shadow-xs space-y-3">
+            <div class="flex items-center gap-2">
+              <svg class="w-6 h-6 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+              </svg>
+              <h3 class="font-extrabold text-sm">LIFELINK Protection Guarantee</h3>
+            </div>
+            <p class="text-xs text-emerald-100 leading-relaxed">
+              All bookings include 100% money-back guarantee, verified background-checked technicians, and escrow payment protection.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+<script src="lifelink.js"></script>
+</body>
+</html>

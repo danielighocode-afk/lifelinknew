@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking #LL-28491 — LIFELINK</title>
+  
+  <!-- Plus Jakarta Sans Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Leaflet Map CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            emerald: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              200: '#a7f3d0',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+            },
+            slate: {
+              50: '#f8fafc',
+              100: '#f1f5f9',
+              200: '#e2e8f0',
+              300: '#cbd5e1',
+              400: '#94a3b8',
+              500: '#64748b',
+              600: '#475569',
+              700: '#334155',
+              800: '#1e293b',
+              900: '#0f172a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+
+    /* Custom Leaflet Map styling to match light design system */
+    .leaflet-container {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f1f5f9;
+      border-radius: 1.25rem;
+    }
+    .leaflet-popup-content-wrapper {
+      border-radius: 1rem;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12);
+      border: 1px solid #e2e8f0;
+      padding: 0.25rem;
+    }
+    .leaflet-popup-tip {
+      background: #ffffff;
+    }
+
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Pulse effects */
+    @keyframes enRoutePulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.5); }
+      70% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(5, 150, 105, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(5, 150, 105, 0); }
+    }
+    .active-step-pulse {
+      animation: enRoutePulse 2s infinite;
+    }
+
+    /* Custom modal transitions */
+    .modal-backdrop {
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(4px);
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col antialiased selection:bg-emerald-100 selection:text-emerald-900" data-ll-page="booking" data-ll-role="customer">
+
+  <header class="sticky top-0 z-30 bg-white border-b border-slate-200/80 backdrop-blur-md bg-white/95 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-20">
+        
+        <!-- Left: Back Button & Branding -->
+        <div class="flex items-center gap-3 sm:gap-4">
+          <a href="#" onclick="showToast('Navigating back to bookings list...')" class="group flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300 hover:bg-slate-50 transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500/20" title="Back to Bookings">
+            <i class="fa-solid fa-arrow-left text-sm group-hover:-translate-x-0.5 transition-transform"></i>
+          </a>
+          
+          <div class="flex items-center gap-2.5 border-l border-slate-200 pl-3 sm:pl-4">
+            <img src="images/lifelink-logo.png" alt="LifeLink" class="h-10 w-auto object-contain">
+            <div>
+              <span class="text-[10px] font-bold tracking-wider text-slate-400 uppercase leading-none block">Services</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Center/Right: Booking ID & Status Header Badge -->
+        <div class="flex items-center gap-3">
+          <div class="text-right hidden sm:block">
+            <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">Booking Reference</span>
+            <span class="font-mono font-extrabold text-slate-900 text-sm">#LL-28491</span>
+          </div>
+
+          <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-xs font-extrabold shadow-xs">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Confirmed</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
+
+    <!-- TOP SECTION: HEADER TITLE & QUICK META -->
+    <div class="bg-white rounded-3xl p-5 sm:p-7 border border-slate-200/90 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="space-y-1">
+        <div class="flex items-center gap-2.5 flex-wrap">
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Booking #LL-28491</h1>
+          <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 font-extrabold text-xs border border-slate-200">Electrical Repair</span>
+        </div>
+        <p class="text-xs sm:text-sm font-medium text-slate-500">
+          Booked on Oct 7, 2026 • Servicing location: <strong class="text-slate-700">Plot 12 Boundary Road, GRA, Benin City</strong>
+        </p>
+      </div>
+
+      <!-- Action Buttons Top Bar -->
+      <div class="flex items-center gap-2 shrink-0">
+        <button onclick="shareBookingDetails()" class="inline-flex items-center gap-2 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold px-4 py-2.5 rounded-xl border border-slate-200 transition">
+          <i class="fa-solid fa-share-nodes text-slate-500"></i>
+          <span>Share</span>
+        </button>
+        <button onclick="downloadReceipt()" class="inline-flex items-center gap-2 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold px-4 py-2.5 rounded-xl border border-slate-200 transition">
+          <i class="fa-solid fa-file-invoice text-slate-500"></i>
+          <span>Receipt</span>
+        </button>
+      </div>
+    </div>
+
+    <section class="bg-white rounded-3xl p-5 sm:p-7 border border-slate-200/90 shadow-xs space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-base sm:text-lg font-extrabold text-slate-900">Service Status Timeline</h2>
+          <p class="text-xs text-slate-500 font-medium">Real-time status updates from provider</p>
+        </div>
+        <span class="text-xs font-extrabold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+          Live Tracking Active
+        </span>
+      </div>
+
+      <!-- Horizontal Progress Timeline Component -->
+      <div class="overflow-x-auto pt-4 pb-2">
+        <div class="min-w-[680px] relative px-4">
+          
+          <!-- Background Progress Line -->
+          <div class="absolute top-5 left-10 right-10 h-1 bg-slate-200 -z-0"></div>
+          <!-- Completed Progress Active Fill Line (60% width to step 4) -->
+          <div class="absolute top-5 left-10 w-[60%] h-1 bg-emerald-600 -z-0 transition-all duration-500"></div>
+
+          <!-- Step Nodes Row -->
+          <div class="grid grid-cols-6 gap-2 text-center relative z-10">
+            
+            <!-- Step 1: Booking Created (Completed) -->
+            <div class="flex flex-col items-center space-y-2">
+              <div class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-extrabold text-sm shadow-md shadow-emerald-600/20">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <div>
+                <p class="text-xs font-extrabold text-slate-900">Booking created</p>
+                <p class="text-[10px] text-slate-400 font-semibold mt-0.5">Oct 7, 2:15 PM</p>
+              </div>
+            </div>
+
+            <!-- Step 2: Provider Accepted (Completed) -->
+            <div class="flex flex-col items-center space-y-2">
+              <div class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-extrabold text-sm shadow-md shadow-emerald-600/20">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <div>
+                <p class="text-xs font-extrabold text-slate-900">Provider accepted</p>
+                <p class="text-[10px] text-slate-400 font-semibold mt-0.5">Oct 7, 2:20 PM</p>
+              </div>
+            </div>
+
+            <!-- Step 3: Payment Confirmed (Completed) -->
+            <div class="flex flex-col items-center space-y-2">
+              <div class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-extrabold text-sm shadow-md shadow-emerald-600/20">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <div>
+                <p class="text-xs font-extrabold text-slate-900">Payment confirmed</p>
+                <p class="text-[10px] text-slate-400 font-semibold mt-0.5">Oct 7, 2:22 PM</p>
+              </div>
+            </div>
+
+            <!-- Step 4: Provider on the way (ACTIVE CURRENT STEP) -->
+            <div class="flex flex-col items-center space-y-2">
+              <div class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-extrabold text-sm ring-4 ring-emerald-100 active-step-pulse shadow-md shadow-emerald-600/30">
+                <i class="fa-solid fa-location-arrow"></i>
+              </div>
+              <div>
+                <p class="text-xs font-extrabold text-emerald-700">Provider on the way</p>
+                <p class="text-[10px] text-emerald-800 font-extrabold mt-0.5">● Active now (~18m away)</p>
+              </div>
+            </div>
+
+            <!-- Step 5: Service Started (Pending) -->
+            <div class="flex flex-col items-center space-y-2">
+              <div class="w-10 h-10 rounded-full bg-white border-2 border-slate-300 text-slate-400 flex items-center justify-center font-bold text-xs">
+                <i class="fa-solid fa-bolt"></i>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-slate-400">Service started</p>
+                <p class="text-[10px] text-slate-400 font-semibold mt-0.5">Pending arrival</p>
+              </div>
+            </div>
+
+            <!-- Step 6: Completed (Pending) -->
+            <div class="flex flex-col items-center space-y-2">
+              <div class="w-10 h-10 rounded-full bg-white border-2 border-slate-300 text-slate-400 flex items-center justify-center font-bold text-xs">
+                <i class="fa-solid fa-flag-checkered"></i>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-slate-400">Completed</p>
+                <p class="text-[10px] text-slate-400 font-semibold mt-0.5">Awaiting release</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+      <!-- ================= LEFT COLUMN: PROVIDER CARD & INTERACTIVE MAP ================= -->
+      <section class="lg:col-span-7 space-y-6">
+
+        <!-- PROVIDER INFORMATION CARD -->
+        <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-xs space-y-6">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+            <h3 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-user-shield text-emerald-600"></i>
+              Assigned Service Provider
+            </h3>
+            <span class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-800 text-xs font-extrabold px-3 py-1 rounded-full border border-emerald-200">
+              <i class="fa-solid fa-circle-check text-emerald-600"></i> Verified Professional
+            </span>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+            
+            <!-- Provider Avatar & Name -->
+            <div class="flex items-center gap-4">
+              <div class="relative shrink-0">
+                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200" 
+                     alt="Chuks Electrical" 
+                     class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover border-2 border-emerald-100 shadow-sm"
+                     onerror="this.src='https://placehold.co/200x200/059669/FFFFFF?text=CE'">
+                <div class="absolute -bottom-1 -right-1 bg-emerald-600 text-white w-6 h-6 rounded-lg flex items-center justify-center ring-2 ring-white shadow-xs" title="LIFELINK Verified">
+                  <i class="fa-solid fa-shield-halved text-xs"></i>
+                </div>
+              </div>
+
+              <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                  <h4 class="text-lg sm:text-xl font-extrabold text-slate-900">Chuks Electrical</h4>
+                </div>
+                <p class="text-xs font-extrabold text-emerald-700 flex items-center gap-1.5">
+                  <i class="fa-solid fa-bolt text-xs"></i> Licensed Master Electrician
+                </p>
+
+                <!-- Provider Metrics Badges -->
+                <div class="flex items-center flex-wrap gap-x-3 gap-y-1 text-xs font-bold text-slate-600 pt-1">
+                  <span class="flex items-center gap-1 text-amber-500">
+                    <i class="fa-solid fa-star"></i> 4.9 <span class="text-slate-400 font-normal">(142)</span>
+                  </span>
+                  <span class="text-slate-300">•</span>
+                  <span class="text-emerald-700 font-extrabold">Trust Score: 94/100</span>
+                  <span class="text-slate-300">•</span>
+                  <span class="text-slate-600">187 jobs done</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Response SLA Pill -->
+            <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200 text-center shrink-0 w-full sm:w-auto">
+              <span class="text-[10px] font-extrabold uppercase text-slate-400 block tracking-wider">Avg Response</span>
+              <span class="text-sm font-extrabold text-slate-900">&lt; 5 Minutes</span>
+            </div>
+
+          </div>
+
+          <!-- Quick Action Buttons Row -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2">
+            <button onclick="openMessageModal()" class="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-extrabold text-xs py-3 px-3 rounded-xl shadow-md shadow-emerald-600/20 transition">
+              <i class="fa-solid fa-comment-dots"></i>
+              <span>Message</span>
+            </button>
+
+            <button onclick="openCallModal()" class="flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 active:bg-slate-950 text-white font-extrabold text-xs py-3 px-3 rounded-xl transition">
+              <i class="fa-solid fa-phone"></i>
+              <span>Call</span>
+            </button>
+
+            <button onclick="shareLiveLocation()" class="flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-extrabold text-xs py-3 px-3 rounded-xl transition">
+              <i class="fa-solid fa-location-crosshairs text-emerald-600"></i>
+              <span>Share Location</span>
+            </button>
+
+            <button onclick="openProfileModal()" class="flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-extrabold text-xs py-3 px-3 rounded-xl transition">
+              <i class="fa-solid fa-id-card text-slate-500"></i>
+              <span>View Profile</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- LIVE EN-ROUTE MAP PREVIEW -->
+        <div class="bg-white rounded-3xl p-5 sm:p-7 border border-slate-200/90 shadow-xs space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-map-location-dot text-emerald-600"></i>
+                Live Provider Tracking
+              </h3>
+              <p class="text-xs text-slate-500 font-medium">Chuks is currently driving via Boundary Rd / Sapele Rd</p>
+            </div>
+
+            <span class="text-xs font-extrabold bg-slate-100 text-slate-800 px-3 py-1 rounded-full border border-slate-200 flex items-center gap-1.5">
+              <i class="fa-solid fa-car-side text-emerald-600"></i> ETA: 18 mins
+            </span>
+          </div>
+
+          <!-- Leaflet Map Canvas Container -->
+          <div class="relative w-full h-80 sm:h-96 rounded-2xl overflow-hidden border border-slate-200 shadow-inner">
+            <div id="bookingMap" class="w-full h-full"></div>
+
+            <!-- Floating Map Info Overlay Overlay -->
+            <div class="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-slate-200/90 shadow-lg flex items-center justify-between gap-3 z-[400]">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 font-bold">
+                  <i class="fa-solid fa-van-shuttle"></i>
+                </div>
+                <div>
+                  <p class="text-xs font-extrabold text-slate-900">En Route to Benin City Destination</p>
+                  <p class="text-[11px] text-slate-500 font-medium">Traffic: Light • Distance: ~4.2 km away</p>
+                </div>
+              </div>
+              <button onclick="centerMapOnProvider()" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white font-extrabold text-xs shadow-xs hover:bg-emerald-700 transition shrink-0">
+                Focus Van
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= RIGHT COLUMN: BOOKING INFORMATION & REQUEST DETAILS ================= -->
+      <aside class="lg:col-span-5 space-y-6">
+
+        <!-- BOOKING DETAILS & PRICING SUMMARY -->
+        <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-xs space-y-5">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+            <h3 class="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-file-lines text-emerald-600"></i>
+              Booking Information
+            </h3>
+            <span class="text-xs font-mono font-bold text-slate-400">#LL-28491</span>
+          </div>
+
+          <!-- Info List -->
+          <div class="space-y-4 text-xs font-medium">
+            
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-plug text-sm"></i>
+              </div>
+              <div>
+                <span class="text-[11px] font-bold uppercase text-slate-400 block">Service Requested</span>
+                <span class="text-sm font-extrabold text-slate-900">Electrical repair</span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
+                <i class="fa-regular fa-calendar-check text-sm"></i>
+              </div>
+              <div>
+                <span class="text-[11px] font-bold uppercase text-slate-400 block">Date & Time</span>
+                <span class="text-sm font-extrabold text-slate-900">October 8, 2026 @ 3:30 PM</span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-location-dot text-sm text-emerald-600"></i>
+              </div>
+              <div>
+                <span class="text-[11px] font-bold uppercase text-slate-400 block">Service Address</span>
+                <span class="text-sm font-extrabold text-slate-900">Plot 12 Boundary Road, GRA, Benin City</span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 pt-2 border-t border-slate-100">
+              <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-shield-halved text-sm"></i>
+              </div>
+              <div class="flex-grow flex items-center justify-between">
+                <div>
+                  <span class="text-[11px] font-bold uppercase text-slate-400 block">Agreed Price (Escrow Held)</span>
+                  <span class="text-lg font-extrabold text-emerald-600">₦18,500</span>
+                </div>
+                <span class="text-[10px] font-extrabold bg-emerald-50 text-emerald-800 px-2.5 py-1 rounded-md border border-emerald-200">
+                  Paid & Protected
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ORIGINAL CUSTOMER REQUEST & ATTACHMENTS -->
+        <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-xs space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-clipboard-question text-emerald-600"></i>
+              Original Request Note
+            </h3>
+          </div>
+
+          <p class="text-xs sm:text-sm text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-2xl border border-slate-200/80 font-medium">
+            "The main circuit breaker panel in the hallway trips every time the master bedroom AC turns on. Need urgent inspection and fuse replacement."
+          </p>
+
+          <!-- Uploaded Attachments Gallery -->
+          <div>
+            <span class="text-[11px] font-extrabold uppercase text-slate-400 tracking-wider block mb-2">
+              Attached Issue Photos (2)
+            </span>
+            <div class="grid grid-cols-2 gap-3">
+              <div onclick="openLightbox('https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=800', 'Breaker Box Circuit Overload')" 
+                   class="group relative h-28 rounded-2xl overflow-hidden border border-slate-200 cursor-pointer shadow-xs hover:border-emerald-500 transition">
+                <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=400" alt="Electrical Panel" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                <div class="absolute inset-0 bg-slate-900/30 group-hover:bg-slate-900/10 transition flex items-center justify-center text-white text-xs font-bold gap-1">
+                  <i class="fa-solid fa-magnifying-glass-plus"></i> View
+                </div>
+              </div>
+
+              <div onclick="openLightbox('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=800', 'Master AC Switch Fuse')" 
+                   class="group relative h-28 rounded-2xl overflow-hidden border border-slate-200 cursor-pointer shadow-xs hover:border-emerald-500 transition">
+                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=400" alt="Fuse Panel" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                <div class="absolute inset-0 bg-slate-900/30 group-hover:bg-slate-900/10 transition flex items-center justify-center text-white text-xs font-bold gap-1">
+                  <i class="fa-solid fa-magnifying-glass-plus"></i> View
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ESCROW GUARANTEE & CANCELLATION BOX -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-xs space-y-4">
+          <div class="flex items-start gap-3">
+            <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-handshake-shield text-base"></i>
+            </div>
+            <div>
+              <h4 class="text-sm font-extrabold text-slate-900">LIFELINK Escrow Guarantee</h4>
+              <p class="text-xs text-slate-500 mt-0.5 leading-snug">
+                Your payment of ₦18,500 will only be released to Chuks Electrical after you confirm complete satisfaction.
+              </p>
+            </div>
+          </div>
+
+          <!-- Subtle Cancel Booking Button -->
+          <div class="pt-3 border-t border-slate-100 text-center">
+            <button onclick="openCancelModal()" class="w-full py-3 px-4 rounded-xl border border-slate-200 hover:border-rose-300 hover:bg-rose-50 text-slate-500 hover:text-rose-700 font-extrabold text-xs transition duration-200 flex items-center justify-center gap-2">
+              <i class="fa-solid fa-xmark"></i>
+              <span>Cancel Booking</span>
+            </button>
+            <span class="text-[10px] text-slate-400 block mt-1.5">Free cancellation up to 10 minutes prior to provider arrival.</span>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </main>
+
+
+  <!-- MODAL 1: MESSAGE PROVIDER DRAWER/DIALOG -->
+  <div id="messageModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <div onclick="closeModal('messageModal')" class="absolute inset-0 modal-backdrop"></div>
+    <div class="relative bg-white rounded-3xl max-w-md w-full mx-4 p-6 border border-slate-200 shadow-2xl space-y-4 z-10">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-3">
+          <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=100" class="w-10 h-10 rounded-xl object-cover">
+          <div>
+            <h3 class="text-sm font-extrabold text-slate-900">Message Chuks Electrical</h3>
+            <span class="text-[10px] font-bold text-emerald-600">● Online (En Route)</span>
+          </div>
+        </div>
+        <button onclick="closeModal('messageModal')" class="text-slate-400 hover:text-slate-600 p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="h-48 overflow-y-auto space-y-3 bg-slate-50 p-3 rounded-2xl border border-slate-200 text-xs">
+        <div class="bg-white p-2.5 rounded-xl border border-slate-200 max-w-[85%]">
+          <p class="font-bold text-slate-800">Chuks Electrical</p>
+          <p class="text-slate-600 mt-0.5">Hello! I am on Boundary Road heading towards your compound. I should be there in about 18 minutes.</p>
+          <span class="text-[9px] text-slate-400 block mt-1 text-right">2:24 PM</span>
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <input type="text" id="chatInput" placeholder="Write a message to Chuks..." class="flex-grow px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-emerald-600 font-medium">
+        <button onclick="sendChatMessage()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs px-4 rounded-xl transition">
+          Send
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: CALL PROVIDER DIALOG -->
+  <div id="callModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <div onclick="closeModal('callModal')" class="absolute inset-0 modal-backdrop"></div>
+    <div class="relative bg-white rounded-3xl max-w-sm w-full mx-4 p-6 border border-slate-200 shadow-2xl text-center space-y-5 z-10">
+      <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto text-2xl shadow-inner">
+        <i class="fa-solid fa-phone"></i>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-extrabold text-slate-900">Call Chuks Electrical</h3>
+        <p class="text-xs text-slate-500 mt-1">LIFELINK Masked Number Protection</p>
+        <p class="text-base font-mono font-extrabold text-slate-800 mt-2">+234 803 920 1829</p>
+      </div>
+
+      <div class="space-y-2 pt-2">
+        <a href="tel:+2348039201829" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3 rounded-xl transition block text-xs">
+          Dial Phone Number
+        </a>
+        <button onclick="closeModal('callModal')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: PROVIDER PROFILE MODAL -->
+  <div id="profileModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <div onclick="closeModal('profileModal')" class="absolute inset-0 modal-backdrop"></div>
+    <div class="relative bg-white rounded-3xl max-w-md w-full mx-4 p-6 sm:p-7 border border-slate-200 shadow-2xl space-y-5 z-10">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-base font-extrabold text-slate-900">Provider Credentials</h3>
+        <button onclick="closeModal('profileModal')" class="text-slate-400 hover:text-slate-600">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200" class="w-16 h-16 rounded-2xl object-cover border border-slate-200">
+        <div>
+          <h4 class="font-extrabold text-slate-900 text-base">Chuks Electrical</h4>
+          <span class="text-xs font-bold text-emerald-600">Verified Master Electrician</span>
+          <p class="text-xs text-slate-500 mt-0.5">Serving Benin City since 2019</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-2 bg-slate-50 p-3 rounded-2xl border border-slate-200 text-center text-xs">
+        <div>
+          <span class="text-slate-400 font-bold block text-[10px] uppercase">Trust Score</span>
+          <span class="font-extrabold text-emerald-600">94 / 100</span>
+        </div>
+        <div>
+          <span class="text-slate-400 font-bold block text-[10px] uppercase">Rating</span>
+          <span class="font-extrabold text-slate-800">★ 4.9</span>
+        </div>
+        <div>
+          <span class="text-slate-400 font-bold block text-[10px] uppercase">Jobs</span>
+          <span class="font-extrabold text-slate-800">187 Completed</span>
+        </div>
+      </div>
+
+      <div class="space-y-2 text-xs text-slate-600">
+        <p class="flex items-center gap-2"><i class="fa-solid fa-certificate text-emerald-600"></i> Government Trade Licensed & Insured</p>
+        <p class="flex items-center gap-2"><i class="fa-solid fa-fingerprint text-emerald-600"></i> Identity & Background Checked</p>
+        <p class="flex items-center gap-2"><i class="fa-solid fa-award text-emerald-600"></i> LIFELINK Top Rated Provider 2025/2026</p>
+      </div>
+
+      <button onclick="closeModal('profileModal')" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-extrabold py-3 rounded-xl transition text-xs">
+        Close Profile
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL 4: PHOTO LIGHTBOX -->
+  <div id="lightboxModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <div onclick="closeModal('lightboxModal')" class="absolute inset-0 modal-backdrop"></div>
+    <div class="relative max-w-2xl w-full mx-4 p-4 z-10 space-y-3">
+      <div class="flex items-center justify-between text-white">
+        <span id="lightboxCaption" class="font-extrabold text-sm">Photo Preview</span>
+        <button onclick="closeModal('lightboxModal')" class="text-white hover:text-slate-300">
+          <i class="fa-solid fa-xmark text-2xl"></i>
+        </button>
+      </div>
+      <img id="lightboxImage" src="" class="w-full max-h-[75vh] object-contain rounded-2xl border border-slate-700 shadow-2xl bg-black">
+    </div>
+  </div>
+
+  <!-- MODAL 5: CANCEL BOOKING DIALOG -->
+  <div id="cancelModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <div onclick="closeModal('cancelModal')" class="absolute inset-0 modal-backdrop"></div>
+    <div class="relative bg-white rounded-3xl max-w-md w-full mx-4 p-6 sm:p-7 border border-slate-200 shadow-2xl space-y-5 z-10">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2 text-rose-600">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <h3 class="text-base font-extrabold text-slate-900">Cancel Booking #LL-28491?</h3>
+        </div>
+        <button onclick="closeModal('cancelModal')" class="text-slate-400 hover:text-slate-600">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Please select a reason for cancellation. Since Chuks is en route, full escrow refund (₦18,500) applies according to LIFELINK's policy.
+      </p>
+
+      <div class="space-y-2 text-xs">
+        <label class="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer">
+          <input type="radio" name="cancelReason" checked class="text-emerald-600 focus:ring-emerald-500">
+          <span class="font-bold text-slate-800">Issue resolved / No longer needed</span>
+        </label>
+        <label class="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer">
+          <input type="radio" name="cancelReason" class="text-emerald-600 focus:ring-emerald-500">
+          <span class="font-bold text-slate-800">Need to reschedule to another date</span>
+        </label>
+        <label class="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer">
+          <input type="radio" name="cancelReason" class="text-emerald-600 focus:ring-emerald-500">
+          <span class="font-bold text-slate-800">Booked by mistake</span>
+        </label>
+      </div>
+
+      <div class="pt-2 flex items-center gap-3">
+        <button onclick="closeModal('cancelModal')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl text-xs transition">
+          Keep Booking
+        </button>
+        <button onclick="confirmCancellation()" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-extrabold py-3 rounded-xl text-xs shadow-md shadow-rose-600/20 transition">
+          Confirm Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl text-xs font-bold flex items-center gap-2.5 hidden border border-slate-700">
+    <i class="fa-solid fa-circle-info text-emerald-400"></i>
+    <span id="toastMsg">Action executed successfully.</span>
+  </div>
+
+  <script>
+    let map, providerMarker, customerMarker, routePolyline;
+
+    // Center coordinates in Benin City, Nigeria (Boundary Road, GRA)
+    const customerCoords = [6.3210, 5.6180];
+    const providerCoords = [6.3350, 5.6280];
+
+    window.onload = function() {
+      initLeafletMap();
+    };
+
+    function initLeafletMap() {
+      // Initialize map centered on Benin City
+      map = L.map('bookingMap', {
+        zoomControl: false,
+        attributionControl: false
+      }).setView([6.3280, 5.6230], 14);
+
+      // Add CartoDB Positron clean light tile layer
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19
+      }).addTo(map);
+
+      // Custom Customer Home Pin Marker
+      const customerIcon = L.divIcon({
+        className: 'custom-div-icon',
+        html: `
+          <div style="background:#0f172a; color:#fff; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-center:center; font-size:14px; border:3px solid #fff; box-shadow:0 4px 12px rgba(0,0,0,0.25);">
+            <i class="fa-solid fa-house" style="margin:auto;"></i>
+          </div>`,
+        iconSize: [36, 36],
+        iconAnchor: [18, 18]
+      });
+
+      // Custom Provider Van Pin Marker
+      const providerIcon = L.divIcon({
+        className: 'custom-div-icon',
+        html: `
+          <div style="background:#059669; color:#fff; width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-center:center; font-size:16px; border:3px solid #fff; box-shadow:0 6px 16px rgba(5,150,105,0.4);" class="active-step-pulse">
+            <i class="fa-solid fa-van-shuttle" style="margin:auto;"></i>
+          </div>`,
+        iconSize: [42, 42],
+        iconAnchor: [21, 21]
+      });
+
+      // Add Markers
+      customerMarker = L.marker(customerCoords, { icon: customerIcon }).addTo(map)
+        .bindPopup("<b>Your Destination</b><br>Plot 12 Boundary Road, GRA");
+
+      providerMarker = L.marker(providerCoords, { icon: providerIcon }).addTo(map)
+        .bindPopup("<b>Chuks Electrical</b><br>En route (~18 mins away)");
+
+      // Draw Path Polyline
+      const pathPoints = [
+        providerCoords,
+        [6.3310, 5.6250],
+        [6.3260, 5.6210],
+        customerCoords
+      ];
+
+      routePolyline = L.polyline(pathPoints, {
+        color: '#059669',
+        weight: 5,
+        opacity: 0.8,
+        dashArray: '8, 8'
+      }).addTo(map);
+
+      // Fit map bounds to show route
+      map.fitBounds(routePolyline.getBounds(), { padding: [40, 40] });
+    }
+
+    function centerMapOnProvider() {
+      if (map && providerMarker) {
+        map.flyTo(providerCoords, 16, { duration: 1.2 });
+        providerMarker.openPopup();
+      }
+    }
+
+    // Modal Control Functions
+    function openMessageModal() {
+      document.getElementById('messageModal').classList.remove('hidden');
+    }
+
+    function openCallModal() {
+      document.getElementById('callModal').classList.remove('hidden');
+    }
+
+    function openProfileModal() {
+      document.getElementById('profileModal').classList.remove('hidden');
+    }
+
+    function openCancelModal() {
+      document.getElementById('cancelModal').classList.remove('hidden');
+    }
+
+    function openLightbox(src, caption) {
+      document.getElementById('lightboxImage').src = src;
+      document.getElementById('lightboxCaption').innerText = caption;
+      document.getElementById('lightboxModal').classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chatInput');
+      if (input.value.trim() !== '') {
+        showToast('Message sent to Chuks Electrical');
+        input.value = '';
+        closeModal('messageModal');
+      }
+    }
+
+    function shareLiveLocation() {
+      showToast('Live GPS location link copied to clipboard!');
+    }
+
+    function shareBookingDetails() {
+      showToast('Booking summary link shared!');
+    }
+
+    function downloadReceipt() {
+      showToast('Downloading PDF Receipt for #LL-28491...');
+    }
+
+    function confirmCancellation() {
+      closeModal('cancelModal');
+      showToast('Booking #LL-28491 has been cancelled. Refund initiated.');
+      setTimeout(() => {
+        window.location.reload();
+      }, 1800);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').innerText = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3000);
+    }
+  </script>
+<script src="lifelink.js"></script>
+</body>
+</html>

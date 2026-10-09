@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings — LIFELINK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>body{font-family:'Plus Jakarta Sans',sans-serif;background:#F8FAFC;color:#0F172A}</style>
+</head>
+<body class="min-h-screen antialiased" data-ll-page="settings" data-ll-role="any">
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+    <div class="max-w-3xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a id="backLink" href="#" class="text-sm font-extrabold text-slate-500 hover:text-emerald-600">← Back</a>
+      <span class="flex items-center gap-1">
+        <img src="images/lifelink-logo.png" alt="LifeLink" class="h-8 w-auto object-contain">
+        <span class="text-xs text-slate-400 font-bold uppercase tracking-wider ml-1">Settings</span>
+      </span>
+      <span class="w-12"></span>
+    </div>
+  </header>
+  <main class="max-w-3xl mx-auto px-4 py-8 space-y-6">
+    <section class="bg-white rounded-3xl border border-slate-200 p-6 space-y-4">
+      <h2 class="text-lg font-extrabold">Profile</h2>
+      <label class="block text-xs font-extrabold text-slate-500 uppercase tracking-wider">Full name
+        <input id="sName" class="mt-1 w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm font-semibold normal-case tracking-normal text-slate-900 outline-none focus:border-emerald-500"></label>
+      <label class="block text-xs font-extrabold text-slate-500 uppercase tracking-wider">Email
+        <input id="sEmail" type="email" class="mt-1 w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm font-semibold normal-case tracking-normal text-slate-900 outline-none focus:border-emerald-500"></label>
+      <label class="block text-xs font-extrabold text-slate-500 uppercase tracking-wider">Phone
+        <input id="sPhone" class="mt-1 w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm font-semibold normal-case tracking-normal text-slate-900 outline-none focus:border-emerald-500"></label>
+      <button id="saveProfile" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm px-6 py-3 rounded-2xl">Save changes</button>
+    </section>
+    <section class="bg-white rounded-3xl border border-slate-200 p-6 space-y-4">
+      <h2 class="text-lg font-extrabold">Change password</h2>
+      <input id="pwOld" type="password" placeholder="Current password" class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm font-semibold outline-none focus:border-emerald-500">
+      <input id="pwNew" type="password" placeholder="New password (min 8 characters)" class="w-full border border-slate-200 rounded-2xl px-4 py-3 text-sm font-semibold outline-none focus:border-emerald-500">
+      <button id="savePw" class="bg-slate-900 hover:bg-slate-700 text-white font-extrabold text-sm px-6 py-3 rounded-2xl">Update password</button>
+    </section>
+    <section class="bg-white rounded-3xl border border-rose-200 p-6 space-y-3">
+      <h2 class="text-lg font-extrabold">Account</h2>
+      <div class="flex flex-wrap gap-3">
+        <button id="signOut" class="bg-white border border-slate-200 text-slate-800 font-extrabold text-sm px-6 py-3 rounded-2xl">Sign out</button>
+        <button id="delAcct" class="bg-rose-50 border border-rose-200 text-rose-700 font-extrabold text-sm px-6 py-3 rounded-2xl">Delete account</button>
+      </div>
+    </section>
+  </main>
+  <script src="lifelink.js"></script>
+  <script>
+    (function () {
+      var me = LL.session(); if (!me) return;
+      sName.value = me.name; sEmail.value = me.email || ''; sPhone.value = me.phone || '';
+      backLink.addEventListener('click', function (e) { e.preventDefault(); LL.go(LL.home(me)); });
+      saveProfile.onclick = function () {
+        var n = sName.value.trim(); if (n.length < 2) return LL.toast('Enter your full name.');
+        var u = Object.assign({}, me, { name: n, email: sEmail.value.trim().toLowerCase(), phone: sPhone.value.trim() });
+        LL.saveUser(u); me = u; LL.toast('Profile saved.');
+      };
+      savePw.onclick = function () {
+        if (LL.hash(pwOld.value) !== me.pw) return LL.toast('Current password is incorrect.');
+        if (pwNew.value.length < 8) return LL.toast('New password must be at least 8 characters.');
+        var u = Object.assign({}, me, { pw: LL.hash(pwNew.value) }); LL.saveUser(u); me = u; pwOld.value = pwNew.value = ''; LL.toast('Password updated.');
+      };
+      signOut.onclick = LL.signOut;
+      delAcct.onclick = function () {
+        if (!confirm('Delete your account permanently?')) return;
+        LL.set('users', LL.users().filter(function (x) { return x.id !== me.id; })); LL.signOut();
+      };
+    })();
+  </script>
+</body>
+</html>

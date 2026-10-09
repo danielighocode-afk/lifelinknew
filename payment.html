@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirm & Pay - LIFELINK</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome CDN for Brand & Payment Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            emerald: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .method-card {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .method-card.active {
+      border-color: #059669;
+      background-color: #f0fdf4;
+      box-shadow: 0 4px 12px -2px rgba(5, 150, 105, 0.12);
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(0.98); }
+    }
+    .pulse-subtle {
+      animation: pulseGlow 3s infinite ease-in-out;
+    }
+    
+    /* Custom scrollbar for subtle container overflow */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="min-h-full bg-slate-50 text-slate-900 flex flex-col antialiased selection:bg-emerald-100 selection:text-emerald-900" data-ll-page="payment" data-ll-role="customer">
+
+  <!-- Navigation Header -->
+  <header class="sticky top-0 z-30 bg-white border-b border-slate-200/80 backdrop-blur-md bg-white/95">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-20">
+        
+        <!-- Brand & Back Action -->
+        <div class="flex items-center gap-4 md:gap-6">
+          <button onclick="handleBackNavigation()" class="group flex items-center justify-center w-9 h-9 rounded-full border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300 hover:bg-slate-50 transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500/20" title="Back to booking">
+            <i class="fa-solid fa-arrow-left text-sm group-hover:-translate-x-0.5 transition-transform"></i>
+          </button>
+          
+          <div class="flex items-center gap-2.5">
+            <img src="images/lifelink-logo.png" alt="LifeLink" class="h-10 w-auto object-contain">
+            <div class="flex flex-col">
+              <span class="text-[10px] uppercase tracking-wider text-slate-500 font-semibold hidden sm:inline">Find. Book. Get It Done.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Escrow Protection Badge -->
+        <div class="flex items-center gap-2">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-xs font-semibold">
+            <i class="fa-solid fa-shield-halved text-emerald-600"></i>
+            <span class="hidden sm:inline">256-Bit SSL</span> Escrow Protected
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+    
+    <!-- Step Indicator Banner -->
+    <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-2 border-b border-slate-200 pb-5">
+      <div>
+        <div class="flex items-center gap-2 text-xs font-bold text-emerald-600 tracking-wider uppercase mb-1">
+          <span>Step 3 of 3</span>
+          <span class="text-slate-300">•</span>
+          <span class="text-slate-500">Checkout</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Confirm & Pay</h1>
+      </div>
+      <p class="text-sm text-slate-500 max-w-md">
+        Review your booking details and select a payment method to secure your provider.
+      </p>
+    </div>
+
+    <!-- Grid Layout: Left column (Payment forms) & Right column (Order Summary) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+      <!-- ================= LEFT COLUMN: PAYMENT METHOD & FORMS ================= -->
+      <section class="lg:col-span-7 space-y-6">
+
+        <!-- Payment Method Selection Card -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 sm:p-7">
+          <div class="flex items-center justify-between mb-5">
+            <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-credit-card text-emerald-600"></i>
+              Select Payment Method
+            </h2>
+            <span class="text-xs text-slate-500 font-medium"><i class="fa-solid fa-lock text-emerald-600 mr-1"></i>Secure Checkout</span>
+          </div>
+
+          <!-- Method Options List -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6" id="paymentMethodsGroup">
+            
+            <!-- Option 1: Card -->
+            <button type="button" 
+                    onclick="selectPaymentMethod('card')" 
+                    id="method-card-btn"
+                    class="method-card active text-left p-4 rounded-xl border-2 border-emerald-600 bg-emerald-50/40 relative focus:outline-none transition-all flex flex-col justify-between h-28">
+              <div class="flex items-center justify-between w-full">
+                <span class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm">
+                  <i class="fa-solid fa-credit-card"></i>
+                </span>
+                <span class="radio-indicator w-5 h-5 rounded-full border-2 border-emerald-600 flex items-center justify-center bg-emerald-600 text-white text-[10px]">
+                  <i class="fa-solid fa-check"></i>
+                </span>
+              </div>
+              <div>
+                <p class="font-bold text-sm text-slate-900 leading-tight">Debit / Credit Card</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Visa, Mastercard, Verve</p>
+              </div>
+            </button>
+
+            <!-- Option 2: Bank Transfer -->
+            <button type="button" 
+                    onclick="selectPaymentMethod('bank')" 
+                    id="method-bank-btn"
+                    class="method-card text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 relative focus:outline-none transition-all flex flex-col justify-between h-28">
+              <div class="flex items-center justify-between w-full">
+                <span class="w-8 h-8 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-sm">
+                  <i class="fa-solid fa-building-columns"></i>
+                </span>
+                <span class="radio-indicator w-5 h-5 rounded-full border-2 border-slate-300 flex items-center justify-center text-transparent">
+                  <i class="fa-solid fa-check"></i>
+                </span>
+              </div>
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <p class="font-bold text-sm text-slate-900 leading-tight">Bank Transfer</p>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-0.5">Instant Automated Account</p>
+              </div>
+            </button>
+
+            <!-- Option 3: LIFELINK Wallet -->
+            <button type="button" 
+                    onclick="selectPaymentMethod('wallet')" 
+                    id="method-wallet-btn"
+                    class="method-card text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 relative focus:outline-none transition-all flex flex-col justify-between h-28">
+              <div class="flex items-center justify-between w-full">
+                <span class="w-8 h-8 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-sm">
+                  <i class="fa-solid fa-wallet"></i>
+                </span>
+                <span class="radio-indicator w-5 h-5 rounded-full border-2 border-slate-300 flex items-center justify-center text-transparent">
+                  <i class="fa-solid fa-check"></i>
+                </span>
+              </div>
+              <div>
+                <div class="flex items-center justify-between">
+                  <p class="font-bold text-sm text-slate-900 leading-tight">LIFELINK Wallet</p>
+                </div>
+                <p class="text-[11px] font-semibold text-emerald-600 mt-0.5">Bal: ₦45,000</p>
+              </div>
+            </button>
+
+          </div>
+
+          <!-- FORM 1: DEBIT/CREDIT CARD -->
+          <div id="form-card" class="space-y-4">
+            
+            <!-- Cardholder Name -->
+            <div>
+              <label for="cardholder" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Cardholder Name</label>
+              <div class="relative">
+                <input type="text" id="cardholder" value="Chuks Nnamdi" placeholder="Name on card"
+                  class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 text-slate-900 font-medium text-sm placeholder-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 transition-all">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                  <i class="fa-regular fa-user"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card Number with dynamic card icon detect -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label for="cardnumber" class="block text-xs font-bold uppercase tracking-wider text-slate-700">Card Number</label>
+                <div class="flex items-center gap-1.5 text-lg text-slate-400" id="cardBrandIcons">
+                  <i class="fa-brands fa-cc-visa" id="visa-icon"></i>
+                  <i class="fa-brands fa-cc-mastercard" id="master-icon"></i>
+                  <i class="fa-solid fa-credit-card" id="generic-card-icon"></i>
+                </div>
+              </div>
+              <div class="relative">
+                <input type="text" id="cardnumber" maxlength="19" value="5399 4012 8831 9024" placeholder="0000 0000 0000 0000"
+                  oninput="formatCardNumber(this)"
+                  class="w-full pl-10 pr-12 py-3 rounded-xl border border-slate-300 text-slate-900 font-medium tracking-widest text-sm placeholder-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 transition-all">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                  <i class="fa-solid fa-credit-card"></i>
+                </div>
+                <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-emerald-600 text-xs font-semibold">
+                  <i class="fa-solid fa-circle-check"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Expiry & CVV -->
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label for="expiry" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Expiry Date</label>
+                <div class="relative">
+                  <input type="text" id="expiry" maxlength="5" value="08/28" placeholder="MM/YY"
+                    oninput="formatExpiry(this)"
+                    class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 text-slate-900 font-medium text-sm placeholder-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 transition-all">
+                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                    <i class="fa-regular fa-calendar-days"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label for="cvv" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                  CVV / CVC
+                  <span title="3 digits on back of card" class="cursor-help text-slate-400 ml-1"><i class="fa-solid fa-circle-info"></i></span>
+                </label>
+                <div class="relative">
+                  <input type="password" id="cvv" maxlength="4" value="821" placeholder="123"
+                    class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 text-slate-900 font-medium text-sm placeholder-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 transition-all">
+                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                    <i class="fa-solid fa-lock"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Save Card Checkbox -->
+            <div class="pt-2">
+              <label class="flex items-center gap-3 cursor-pointer group">
+                <input type="checkbox" checked class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 transition">
+                <span class="text-xs font-medium text-slate-700 group-hover:text-slate-900 transition">Save card securely for future fast booking</span>
+              </label>
+            </div>
+
+          </div>
+
+          <!-- FORM 2: BANK TRANSFER (Hidden by default) -->
+          <div id="form-bank" class="hidden space-y-4">
+            <div class="p-4 bg-emerald-50/70 rounded-xl border border-emerald-200/80">
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                  <i class="fa-solid fa-building-columns text-sm"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-slate-900">Dedicated Virtual Account Created</h4>
+                  <p class="text-xs text-slate-600 mt-0.5">
+                    Transfer the exact amount to this temporary account via your bank app. Your payment will be confirmed automatically.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-slate-900 text-white rounded-2xl p-5 relative overflow-hidden shadow-lg">
+              <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl"></div>
+              
+              <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center gap-2">
+                  <span class="px-2.5 py-1 rounded bg-slate-800 text-[11px] font-bold tracking-wider text-emerald-400 uppercase">GTBank</span>
+                  <span class="text-xs text-slate-400">LIFELINK Escrow Account</span>
+                </div>
+                <!-- Countdown timer -->
+                <div class="text-xs font-mono font-semibold bg-emerald-950/80 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-800/50 flex items-center gap-1.5">
+                  <i class="fa-regular fa-clock text-xs"></i>
+                  <span id="bank-timer">29:58</span>
+                </div>
+              </div>
+
+              <div class="mb-4">
+                <p class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-1">Account Number</p>
+                <div class="flex items-center justify-between bg-slate-800/90 rounded-xl px-4 py-3 border border-slate-700">
+                  <span class="text-xl sm:text-2xl font-mono font-bold tracking-widest text-emerald-400" id="bank-acc-num">9023841102</span>
+                  <button type="button" onclick="copyToClipboard('9023841102')" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white transition active:scale-95 flex items-center gap-1.5">
+                    <i class="fa-regular fa-copy"></i>
+                    <span id="copy-text">Copy</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4 text-xs border-t border-slate-800 pt-3">
+                <div>
+                  <p class="text-slate-400">Account Name</p>
+                  <p class="font-bold text-slate-200 mt-0.5">LIFELINK-Chuks</p>
+                </div>
+                <div>
+                  <p class="text-slate-400">Exact Amount</p>
+                  <p class="font-bold text-emerald-400 mt-0.5" id="bank-exact-amount">₦23,100</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-3.5 bg-amber-50 rounded-xl border border-amber-200/80 text-amber-900 text-xs flex items-start gap-2.5">
+              <i class="fa-solid fa-circle-info text-amber-600 shrink-0 mt-0.5 text-sm"></i>
+              <span>Most transfers reflect within 30 seconds. Do not close this browser window while transferring.</span>
+            </div>
+          </div>
+
+          <!-- FORM 3: LIFELINK WALLET (Hidden by default) -->
+          <div id="form-wallet" class="hidden space-y-4">
+            <div class="p-5 rounded-2xl bg-slate-900 text-white relative overflow-hidden">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs text-slate-400 uppercase font-bold tracking-wider">Available Wallet Balance</span>
+                <span class="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  <i class="fa-solid fa-check text-[10px]"></i> Active
+                </span>
+              </div>
+              <div class="text-3xl font-extrabold text-white tracking-tight mb-4">
+                ₦45,000<span class="text-sm font-normal text-slate-400">.00</span>
+              </div>
+
+              <div class="space-y-2 border-t border-slate-800 pt-3 text-xs">
+                <div class="flex justify-between text-slate-300">
+                  <span>Deduction for Booking:</span>
+                  <span class="font-bold text-slate-100" id="wallet-deduction-text">- ₦23,100</span>
+                </div>
+                <div class="flex justify-between text-emerald-400 font-bold pt-1 border-t border-slate-800/60">
+                  <span>Remaining Balance After Payment:</span>
+                  <span id="wallet-remaining-text">₦21,900</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs flex items-center gap-3">
+              <i class="fa-solid fa-bolt text-emerald-600 text-base"></i>
+              <div>
+                <span class="font-bold">Instant Checkout:</span>
+                <span>Wallet payments are processed immediately with zero gateway delays.</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Security & Escrow Trust Notice -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 space-y-3">
+          <div class="flex items-start gap-3.5">
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-shield-cat text-lg"></i>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-slate-900">Your payment information is encrypted and protected.</h3>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                <strong class="text-slate-800">Protected booking:</strong> Payment is held securely in LIFELINK Escrow and only released to the service provider after job completion according to LIFELINK's booking policy.
+              </p>
+            </div>
+          </div>
+          
+          <div class="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between text-[11px] text-slate-500 gap-2">
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-lock text-emerald-600"></i> PCI-DSS Level 1 Compliant</span>
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-handshake-angle text-emerald-600"></i> Money-Back Assurance</span>
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-headset text-emerald-600"></i> 24/7 Support</span>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= RIGHT COLUMN: BOOKING SUMMARY SIDEBAR ================= -->
+      <aside class="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
+
+        <!-- Booking Summary Card -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden">
+          
+          <!-- Header -->
+          <div class="bg-slate-900 text-white p-5">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Booking Summary</span>
+              <span class="text-[11px] bg-slate-800 text-slate-300 px-2.5 py-0.5 rounded-full border border-slate-700">Ref: #LL-98302</span>
+            </div>
+            <h3 class="text-lg font-bold text-white">AC Repair & Servicing</h3>
+          </div>
+
+          <!-- Provider Info -->
+          <div class="p-5 border-b border-slate-100 bg-slate-50/50">
+            <div class="flex items-center gap-3.5">
+              <div class="relative">
+                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=150" 
+                     alt="Chuks Cooling Services" 
+                     class="w-12 h-12 rounded-xl object-cover border border-slate-200 shadow-sm"
+                     onerror="this.src='https://placehold.co/150x150/059669/FFFFFF?text=CC'">
+                <span class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white flex items-center justify-center text-[8px] text-white" title="Verified Provider">
+                  <i class="fa-solid fa-check"></i>
+                </span>
+              </div>
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <h4 class="font-bold text-sm text-slate-900">Chuks Cooling Services</h4>
+                </div>
+                <p class="text-xs text-slate-500 font-medium">Master AC Specialist</p>
+                <div class="flex items-center gap-1 mt-0.5 text-xs">
+                  <i class="fa-solid fa-star text-amber-400 text-[11px]"></i>
+                  <span class="font-bold text-slate-800">4.9</span>
+                  <span class="text-slate-400">(128 reviews)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Appointment Logistics -->
+          <div class="p-5 space-y-3.5 text-xs border-b border-slate-100">
+            <div class="flex items-start gap-3 text-slate-700">
+              <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-wrench"></i>
+              </div>
+              <div class="flex-grow">
+                <p class="text-slate-400 text-[11px] font-semibold uppercase">Service</p>
+                <p class="font-bold text-slate-900 text-sm">AC Repair</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 text-slate-700">
+              <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
+                <i class="fa-regular fa-calendar text-slate-600"></i>
+              </div>
+              <div class="flex-grow">
+                <p class="text-slate-400 text-[11px] font-semibold uppercase">Date & Time</p>
+                <p class="font-bold text-slate-900">Today, Oct 7, 2026 • 4:00 PM</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 text-slate-700">
+              <div class="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-location-dot text-slate-600"></i>
+              </div>
+              <div class="flex-grow">
+                <p class="text-slate-400 text-[11px] font-semibold uppercase">Location</p>
+                <p class="font-bold text-slate-900">GRA, Benin City</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Coupon / Promo Input -->
+          <div class="p-5 border-b border-slate-100 bg-slate-50/30">
+            <label for="promo-input" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Have a Promo Code?</label>
+            <div class="flex gap-2">
+              <input type="text" id="promo-input" placeholder="Try: LIFELINK10" class="flex-grow px-3 py-2 text-xs rounded-lg border border-slate-300 font-medium uppercase placeholder:normal-case focus:outline-none focus:border-emerald-600">
+              <button type="button" onclick="applyPromoCode()" class="px-3 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg transition active:scale-95">Apply</button>
+            </div>
+            <div id="promo-msg" class="mt-1.5 text-[11px] hidden"></div>
+          </div>
+
+          <!-- Price Breakdown -->
+          <div class="p-5 space-y-2.5 text-xs">
+            <div class="flex justify-between text-slate-600">
+              <span>Service fee</span>
+              <span class="font-medium text-slate-900">₦22,000</span>
+            </div>
+            
+            <div class="flex justify-between text-slate-600">
+              <span class="flex items-center gap-1">
+                LIFELINK service fee
+                <i class="fa-solid fa-circle-info text-slate-400 text-[10px]" title="Platform escrow protection and insurance fee"></i>
+              </span>
+              <span class="font-medium text-slate-900">₦1,100</span>
+            </div>
+
+            <div id="discount-row" class="hidden justify-between text-emerald-600 font-semibold">
+              <span>Promo Discount</span>
+              <span id="discount-val">-₦1,100</span>
+            </div>
+
+            <div class="pt-3 mt-2 border-t border-slate-200 flex items-baseline justify-between">
+              <div>
+                <span class="text-sm font-bold text-slate-900 block">Total</span>
+                <span class="text-[10px] text-slate-500 font-normal">Includes VAT & Escrow</span>
+              </div>
+              <div class="text-right">
+                <span class="text-2xl font-extrabold text-slate-900 tracking-tight" id="total-amount-display">₦23,100</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons Area -->
+          <div class="p-5 bg-slate-50 border-t border-slate-100 space-y-3">
+            <button type="button" 
+                    id="pay-button"
+                    onclick="processPayment()" 
+                    class="w-full py-4 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-extrabold text-base shadow-lg shadow-emerald-600/25 hover:shadow-emerald-600/40 transition-all flex items-center justify-center gap-2.5 cursor-pointer focus:outline-none focus:ring-4 focus:ring-emerald-500/30">
+              <i class="fa-solid fa-lock text-sm"></i>
+              <span id="pay-btn-label">Pay ₦23,100</span>
+            </button>
+
+            <button type="button" 
+                    onclick="handleBackNavigation()"
+                    class="w-full py-3 px-4 rounded-xl border border-slate-300 hover:border-slate-400 bg-white text-slate-700 font-bold text-xs transition active:scale-98 text-center flex items-center justify-center gap-2">
+              <i class="fa-solid fa-chevron-left text-[10px]"></i>
+              Back to booking
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Guarantee Card -->
+        <div class="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200/80 text-emerald-900 text-xs flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 font-bold text-lg shadow-sm">
+            <i class="fa-solid fa-award"></i>
+          </div>
+          <div>
+            <h5 class="font-bold text-slate-900 text-xs">100% Satisfaction Guarantee</h5>
+            <p class="text-slate-600 mt-0.5 leading-snug">
+              If the provider doesn't deliver satisfactory work, LIFELINK will resolve it or refund your payment.
+            </p>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- Payment Confirmation Modal (Triggered on successful payment) -->
+  <div id="payment-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden transition-opacity duration-300 opacity-0">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 text-center shadow-2xl border border-slate-100 transform scale-95 transition-transform duration-300 relative overflow-hidden" id="modal-card">
+      
+      <!-- Top Decorative Bar -->
+      <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600"></div>
+
+      <!-- Icon Animation Badge -->
+      <div class="w-20 h-20 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-5 shadow-inner">
+        <i class="fa-solid fa-circle-check text-4xl animate-bounce"></i>
+      </div>
+
+      <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">Booking Confirmed!</h3>
+      <p class="text-sm text-slate-600 mt-1.5">
+        Your payment of <strong class="text-slate-900" id="receipt-modal-amount">₦23,100</strong> has been held securely in LIFELINK Escrow.
+      </p>
+
+      <!-- Transaction Details Box -->
+      <div class="my-6 p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-left space-y-2.5 text-xs">
+        <div class="flex justify-between border-b border-slate-200/60 pb-2">
+          <span class="text-slate-500">Transaction Ref:</span>
+          <span class="font-mono font-bold text-slate-900" id="receipt-ref">#LL-83920194</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">Service Provider:</span>
+          <span class="font-bold text-slate-900">Chuks Cooling Services</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">Scheduled Time:</span>
+          <span class="font-bold text-slate-900">Today @ 4:00 PM</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">Payment Method:</span>
+          <span class="font-bold text-slate-900" id="receipt-method">Debit Card</span>
+        </div>
+        <div class="flex justify-between pt-1 text-emerald-700 font-bold border-t border-slate-200/60">
+          <span>Escrow Status:</span>
+          <span class="flex items-center gap-1"><i class="fa-solid fa-shield-halved text-xs"></i> Protected</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons in Modal -->
+      <div class="space-y-2.5">
+        <button type="button" onclick="window.location.reload()" class="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm shadow-md transition active:scale-98">
+          View Booking Details
+        </button>
+        <button type="button" onclick="downloadReceipt()" class="w-full py-2.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-50 transition">
+          <i class="fa-solid fa-download mr-1.5"></i> Download Receipt
+        </button>
+      </div>
+
+      <p class="text-[11px] text-slate-400 mt-4">
+        A confirmation SMS and email have been sent to your registered contact.
+      </p>
+
+    </div>
+  </div>
+
+  <script>
+    // Global state
+    let selectedMethod = 'card';
+    let baseServicePrice = 22000;
+    let baseServiceFee = 1100;
+    let discountAmount = 0;
+
+    // Format utility for Nigerian Naira
+    function formatNaira(amount) {
+      return '₦' + amount.toLocaleString('en-NG');
+    }
+
+    // Tab switcher logic
+    function selectPaymentMethod(method) {
+      selectedMethod = method;
+
+      // Update Tab Styles
+      const methods = ['card', 'bank', 'wallet'];
+      methods.forEach(m => {
+        const btn = document.getElementById(`method-${m}-btn`);
+        const form = document.getElementById(`form-${m}`);
+        const indicator = btn.querySelector('.radio-indicator');
+
+        if (m === method) {
+          btn.classList.add('active', 'border-emerald-600', 'bg-emerald-50/40');
+          btn.classList.remove('border-slate-200', 'bg-white');
+          indicator.classList.add('border-emerald-600', 'bg-emerald-600', 'text-white');
+          indicator.classList.remove('border-slate-300', 'text-transparent');
+          form.classList.remove('hidden');
+        } else {
+          btn.classList.remove('active', 'border-emerald-600', 'bg-emerald-50/40');
+          btn.classList.add('border-slate-200', 'bg-white');
+          indicator.classList.remove('border-emerald-600', 'bg-emerald-600', 'text-white');
+          indicator.classList.add('border-slate-300', 'text-transparent');
+          form.classList.add('hidden');
+        }
+      });
+    }
+
+    // Auto-formatting Card Number with type detection
+    function formatCardNumber(input) {
+      let value = input.value.replace(/\D/g, '');
+      let formatted = '';
+      for (let i = 0; i < value.length; i++) {
+        if (i > 0 && i % 4 === 0) formatted += ' ';
+        formatted += value[i];
+      }
+      input.value = formatted.substring(0, 19);
+
+      // Simple Card Brand Visual Detection
+      const visaIcon = document.getElementById('visa-icon');
+      const masterIcon = document.getElementById('master-icon');
+      const genericIcon = document.getElementById('generic-card-icon');
+
+      if (value.startsWith('4')) {
+        visaIcon.className = 'fa-brands fa-cc-visa text-blue-600 text-xl';
+        masterIcon.className = 'fa-brands fa-cc-mastercard text-slate-300 text-xl';
+        genericIcon.className = 'fa-solid fa-credit-card text-slate-300 text-base';
+      } else if (value.startsWith('5')) {
+        visaIcon.className = 'fa-brands fa-cc-visa text-slate-300 text-xl';
+        masterIcon.className = 'fa-brands fa-cc-mastercard text-amber-600 text-xl';
+        genericIcon.className = 'fa-solid fa-credit-card text-slate-300 text-base';
+      } else {
+        visaIcon.className = 'fa-brands fa-cc-visa text-slate-300 text-xl';
+        masterIcon.className = 'fa-brands fa-cc-mastercard text-slate-300 text-xl';
+        genericIcon.className = 'fa-solid fa-credit-card text-emerald-600 text-base';
+      }
+    }
+
+    // Auto-formatting Expiry Date MM/YY
+    function formatExpiry(input) {
+      let value = input.value.replace(/\D/g, '');
+      if (value.length >= 2) {
+        input.value = value.substring(0, 2) + '/' + value.substring(2, 4);
+      } else {
+        input.value = value;
+      }
+    }
+
+    // Promo Code Application
+    function applyPromoCode() {
+      const codeInput = document.getElementById('promo-input');
+      const code = codeInput.value.trim().toUpperCase();
+      const msg = document.getElementById('promo-msg');
+      const discountRow = document.getElementById('discount-row');
+      const discountVal = document.getElementById('discount-val');
+
+      if (code === 'LIFELINK10' || code === 'SAVE1000' || code === 'PROMO') {
+        discountAmount = 1100; // Waive service fee
+        discountRow.classList.remove('hidden');
+        discountRow.classList.add('flex');
+        discountVal.innerText = '-₦1,100';
+
+        msg.className = 'mt-1.5 text-[11px] text-emerald-600 font-bold';
+        msg.innerText = '✓ Promo applied: Service fee waived!';
+        msg.classList.remove('hidden');
+      } else if (code === '') {
+        msg.className = 'mt-1.5 text-[11px] text-amber-600 font-medium';
+        msg.innerText = 'Please enter a voucher or promo code.';
+        msg.classList.remove('hidden');
+      } else {
+        msg.className = 'mt-1.5 text-[11px] text-rose-600 font-medium';
+        msg.innerText = 'Invalid promo code. Try "LIFELINK10".';
+        msg.classList.remove('hidden');
+      }
+
+      updateTotals();
+    }
+
+    // Recalculate Totals
+    function updateTotals() {
+      const grandTotal = baseServicePrice + baseServiceFee - discountAmount;
+      const formattedTotal = formatNaira(grandTotal);
+
+      document.getElementById('total-amount-display').innerText = formattedTotal;
+      document.getElementById('pay-btn-label').innerText = `Pay ${formattedTotal}`;
+      document.getElementById('bank-exact-amount').innerText = formattedTotal;
+      document.getElementById('wallet-deduction-text').innerText = `- ${formattedTotal}`;
+      document.getElementById('wallet-remaining-text').innerText = formatNaira(45000 - grandTotal);
+      document.getElementById('receipt-modal-amount').innerText = formattedTotal;
+    }
+
+    // Copy account number
+    function copyToClipboard(text) {
+      const dummy = document.createElement('textarea');
+      document.body.appendChild(dummy);
+      dummy.value = text;
+      dummy.select();
+      document.execCommand('copy');
+      document.body.removeChild(dummy);
+
+      const copyBtnText = document.getElementById('copy-text');
+      copyBtnText.innerText = 'Copied!';
+      setTimeout(() => {
+        copyBtnText.innerText = 'Copy';
+      }, 2000);
+    }
+
+    // Timer logic for Virtual Bank Account
+    let timeLeft = 1798; // ~30 mins in seconds
+    const timerElem = document.getElementById('bank-timer');
+    setInterval(() => {
+      if (timeLeft <= 0) return;
+      timeLeft--;
+      const mins = Math.floor(timeLeft / 60);
+      const secs = timeLeft % 60;
+      timerElem.innerText = `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }, 1000);
+
+    // Process Payment Action
+    function processPayment() {
+      const payBtn = document.getElementById('pay-button');
+      const payLabel = document.getElementById('pay-btn-label');
+      
+      // Loading State
+      payBtn.disabled = true;
+      payBtn.classList.add('opacity-90', 'cursor-not-allowed');
+      payLabel.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Processing Securely...`;
+
+      setTimeout(() => {
+        // Trigger Confetti Celebration
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+
+        // Set receipt payment method display
+        const methodTextMap = {
+          'card': 'Debit Card (•••• 9024)',
+          'bank': 'GTBank Virtual Transfer',
+          'wallet': 'LIFELINK Wallet'
+        };
+        document.getElementById('receipt-method').innerText = methodTextMap[selectedMethod];
+        document.getElementById('receipt-ref').innerText = '#LL-' + Math.floor(10000000 + Math.random() * 90000000);
+
+        // Show Modal
+        const modal = document.getElementById('payment-modal');
+        const modalCard = document.getElementById('modal-card');
+
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+          modal.classList.remove('opacity-0');
+          modalCard.classList.remove('scale-95');
+          modalCard.classList.add('scale-100');
+        }, 10);
+
+        // Reset button state
+        payBtn.disabled = false;
+        payBtn.classList.remove('opacity-90', 'cursor-not-allowed');
+        updateTotals();
+      }, 1500);
+    }
+
+    // Back button prompt / simulation
+    function handleBackNavigation() {
+      const leave = confirm("Are you sure you want to leave the checkout? Your booking slot will be released.");
+      if (leave) {
+        window.history.back();
+      }
+    }
+
+    // Receipt download simulator
+    function downloadReceipt() {
+      alert("Receipt downloaded to your device as PDF.");
+    }
+  </script>
+<script src="lifelink.js"></script>
+</body>
+</html>
