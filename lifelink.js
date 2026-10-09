@@ -41,12 +41,10 @@
     soon: function (what) { LL.toast((what || 'This section') + ' is coming in the next release.'); }
   });
 
-  /* ---- seed demo accounts (first run) ---- */
+  /* ---- seed admin account only (first run) ---- */
   if (!LL.get('seeded')) {
     LL.set('users', [
-      { id: 'u1', name: 'Daniel Okoro', email: 'daniel@lifelink.ng', phone: '08031234567', pw: LL.hash('password123'), role: 'customer', onboarded: true },
-      { id: 'u2', name: 'Chukwudi Nnamdi', email: 'chuks@lifelink.ng', phone: '08034567890', pw: LL.hash('password123'), role: 'provider', profileDone: true, business: 'Chuks Electrical', category: 'Electrical' },
-      { id: 'u3', name: 'LIFELINK Admin', email: 'admin@lifelink.ng', phone: '08000000000', pw: LL.hash('admin12345'), role: 'admin' }
+      { id: 'u1', name: 'LIFELINK Admin', email: 'admin@lifelink.ng', phone: '08000000000', pw: LL.hash('admin12345'), role: 'admin' }
     ]);
     LL.set('seeded', 1);
   }
@@ -140,13 +138,13 @@
     links.forEach(function (l) { h += '<a href="' + l[1] + '" style="display:block;padding:8px 10px;border-radius:10px;font-size:13px;font-weight:700;color:#334155;text-decoration:none">' + l[0] + '</a>'; });
     h += '<div style="border-top:1px solid #f1f5f9;margin-top:6px;padding-top:6px">';
     if (me) h += '<a href="#" data-act="out" style="display:block;padding:8px 10px;border-radius:10px;font-size:13px;font-weight:800;color:#dc2626;text-decoration:none">Sign out</a>';
-    h += '<a href="#" data-act="reset" style="display:block;padding:8px 10px;border-radius:10px;font-size:12px;font-weight:700;color:#94a3b8;text-decoration:none">Reset demo data</a></div>';
+    h += '<a href="#" data-act="reset" style="display:block;padding:8px 10px;border-radius:10px;font-size:12px;font-weight:700;color:#94a3b8;text-decoration:none">Reset local data</a></div>';
     panel.innerHTML = h;
     panel.querySelectorAll('a').forEach(function (a) { a.onmouseover = function () { a.style.background = '#f1f5f9'; }; a.onmouseout = function () { a.style.background = ''; }; });
     panel.addEventListener('click', function (e) {
       var a = e.target.closest('[data-act]'); if (!a) return; e.preventDefault();
       if (a.getAttribute('data-act') === 'out') LL.signOut();
-      else if (confirm('Clear all demo accounts, requests and bookings in this browser?')) { Object.keys(localStorage).filter(function (k) { return k.indexOf(P) === 0; }).forEach(function (k) { localStorage.removeItem(k); }); LL.go('index.html'); }
+      else if (confirm('Clear all locally stored accounts, requests and bookings in this browser?')) { Object.keys(localStorage).filter(function (k) { return k.indexOf(P) === 0; }).forEach(function (k) { localStorage.removeItem(k); }); LL.go('index.html'); }
     });
     btn.onclick = function () { panel.style.display = panel.style.display === 'none' ? 'block' : 'none'; };
     document.addEventListener('click', function (e) { if (!wrap.contains(e.target)) panel.style.display = 'none'; });
@@ -468,16 +466,11 @@
     var req = LL.get('request', null) || { id: 'LL-8920', description: 'AC repair — Not cooling properly', location: 'Benin City, Edo State' };
     replaceName('AC repair — Not cooling properly', req.description.length > 60 ? req.description.slice(0, 57) + '…' : req.description);
     replaceName('Request #LL-8920', 'Request #' + req.id); replaceName('Benin City, Edo State', req.location);
-    var seeds = [
-      { provider: 'Chuks Cooling Services', price: 22000, rating: 4.9, reviews: 142, arrival: 35, trust: 94, jobs: 187, area: 'Master AC Specialist • GRA, Benin City', img: 'photo-1560250097-0b93528c311a' },
-      { provider: 'Benin Chill Techs', price: 19500, rating: 4.7, reviews: 96, arrival: 50, trust: 89, jobs: 120, area: 'AC & Refrigeration • Ugbowo, Benin City', img: 'photo-1507003211169-0a1dd7228f2d' },
-      { provider: 'Osagie Air & Power', price: 25000, rating: 4.8, reviews: 110, arrival: 25, trust: 91, jobs: 156, area: 'Cooling Engineer • Sapele Road, Benin City', img: 'photo-1472099645785-5658abf4ff4e' }
-    ];
     var real = LL.get('quotes', []).filter(function (q) { return q.requestId === req.id; }).map(function (q) {
       var mins = parseInt((q.arrival.match(/\d+/) || [45])[0], 10); if (/hour|hr/i.test(q.arrival)) mins *= 60;
-      return { provider: q.provider, price: q.price, rating: q.rating || 4.8, reviews: 24, arrival: mins, trust: q.trust || 90, jobs: q.jobs || 40, area: 'Verified Professional • Benin City', img: 'photo-1500648767791-00dcc994a43e', live: true };
+      return { provider: q.provider, price: q.price, rating: q.rating || 0, reviews: q.reviews || 0, arrival: mins, trust: q.trust || 0, jobs: q.jobs || 0, area: 'New provider • Awaiting public profile data', img: 'photo-1500648767791-00dcc994a43e', live: true };
     });
-    var list = real.concat(seeds), box = document.getElementById('quotes-container');
+    var list = real.slice(), box = document.getElementById('quotes-container');
     var star = '<svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>';
     function card(q, i) {
       var best = i === 0;
@@ -493,7 +486,13 @@
         '<div class="flex items-center gap-2"><button data-view="' + i + '" class="bg-white hover:bg-slate-50 text-slate-700 font-extrabold text-xs px-4 py-3 rounded-xl border border-slate-200 transition">View Profile</button>' +
         '<button data-accept="' + i + '" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs px-5 py-3 rounded-xl shadow-md shadow-emerald-600/20 transition">Accept Quote</button></div></div></div></div>';
     }
-    function render(l) { box.innerHTML = l.map(card).join(''); }
+    function render(l) {
+      if (!l.length) {
+        box.innerHTML = '<div class="bg-white rounded-3xl border border-slate-200 shadow-xs p-8 text-center space-y-3"><div class="w-12 h-12 mx-auto rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16h6M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg></div><h3 class="text-lg font-extrabold text-slate-900">No provider quotes yet</h3><p class="text-sm font-semibold text-slate-500 max-w-md mx-auto">Quotes will appear here after real providers join the marketplace and respond to this request.</p></div>';
+        return;
+      }
+      box.innerHTML = l.map(card).join('');
+    }
     render(list);
     var cnt = document.querySelector('header .animate-pulse'); if (cnt && cnt.nextElementSibling) cnt.nextElementSibling.textContent = list.length + ' Responses Received';
     window.sortQuotes = function (by) {
